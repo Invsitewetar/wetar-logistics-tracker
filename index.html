@@ -59,6 +59,10 @@
                 width: 100%;
                 background: white !important;
                 color: black !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
             }
             .no-print {
                 display: none !important;
@@ -82,19 +86,22 @@
                 </div>
             </div>
 
-            <!-- Search bar desktop -->
-            <div class="hidden md:flex items-center space-x-2 flex-1 max-w-sm mx-4">
-                <div class="relative w-full">
-                    <input
-                        type="text"
-                        id="desktopSearchInput"
-                        placeholder="Cari ID, No Kontainer, atau Nama Barang..."
-                        class="w-full bg-slate-950 text-slate-100 rounded-lg pl-10 pr-4 py-2 border border-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all text-sm"
-                    />
-                    <div class="absolute left-3 top-2.5 text-slate-500">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    </div>
-                </div>
+            <!-- TAB SCREEN SWITCHER (DASHBOARD VS FORM EXCEL) -->
+            <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800/80">
+                <button
+                    onclick="switchMainScreen('dashboard')"
+                    id="btnScreenDashboard"
+                    class="px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-amber-500 text-slate-950"
+                >
+                    📊 Dashboard
+                </button>
+                <button
+                    onclick="switchMainScreen('excel')"
+                    id="btnScreenExcel"
+                    class="px-3 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-slate-100 flex items-center gap-1"
+                >
+                    📄 Form Excel (<span id="btnScreenExcelNotif" class="text-amber-500 font-mono">BTR-516</span>)
+                </button>
             </div>
 
             <!-- Header Action Buttons -->
@@ -123,16 +130,16 @@
         </div>
     </header>
 
-    <!-- SEARCH BAR MOBILE -->
-    <div class="p-4 md:hidden border-b border-slate-900 bg-slate-900/50 no-print">
+    <!-- SEARCH BAR MOBILE / DESKTOP ALIGNMENT -->
+    <div class="max-w-7xl mx-auto px-4 pt-4 sm:px-6 lg:px-8 no-print">
         <div class="relative w-full">
             <input
                 type="text"
-                id="mobileSearchInput"
-                placeholder="Cari ID, Kontainer, atau Barang..."
-                class="w-full bg-slate-950 text-slate-100 rounded-lg pl-10 pr-4 py-2 border border-slate-800 focus:outline-none focus:border-amber-500 text-sm"
+                id="searchBarGlobal"
+                placeholder="Cari ID, No Kontainer, atau Nama Barang..."
+                class="w-full bg-slate-900 text-slate-100 rounded-lg pl-10 pr-4 py-2.5 border border-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all text-sm"
             />
-            <div class="absolute left-3 top-2.5 text-slate-500">
+            <div class="absolute left-3 top-3 text-slate-500">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
             </div>
         </div>
@@ -238,268 +245,456 @@
                 </div>
             </div>
 
-            <!-- COLUMN KANAN: DETAIL PELACAKAN SHOPEE-STYLE -->
+            <!-- COLUMN KANAN: DUAL-VIEW SCREEN AREA -->
             <div class="lg:col-span-2 space-y-6">
                 
-                <!-- CARD DETAIL UTAMA -->
-                <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-6 relative">
-                    
-                    <!-- Top Actions inside Card (Hapus & Print Form Buttons) -->
-                    <div class="absolute top-4 right-4 z-10 flex gap-2">
-                        <!-- Print Outbound Form Button (Excel Style) -->
-                        <button
-                            id="btnPrintForm"
-                            onclick="printOutboundForm()"
-                            class="text-[10px] font-bold text-emerald-400 border border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-500 hover:text-white px-2.5 py-1.5 rounded transition-all flex items-center gap-1 active:scale-95"
-                            title="Print form pengajuan outbound resmi BKP/BTR"
-                        >
-                            🖨️ Cetak Form Outbound
-                        </button>
-
-                        <button
-                            id="btnDeleteShipment"
-                            onclick="confirmDelete()"
-                            class="text-[10px] font-bold text-red-400 border border-red-500/20 bg-red-500/10 hover:bg-red-500 hover:text-white px-2.5 py-1.5 rounded transition-all flex items-center gap-1 active:scale-95"
-                            title="Hapus data kargo ini dari daftar"
-                        >
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                            </svg>
-                            <span id="deleteBtnText">Hapus Manifest</span>
-                        </button>
-                    </div>
-
-                    <!-- Header Info Barang -->
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800 pr-24">
-                        <div>
-                            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-                                <span id="detailTrackingId" class="text-xs font-mono-custom font-bold text-amber-400 bg-amber-500/10 py-1 px-2.5 rounded-md border border-amber-500/20">
-                                    TRACKING NO: -
-                                </span>
-                                <span id="detailContainerId" class="text-xs font-mono-custom font-bold text-sky-400 bg-sky-400/10 py-1 px-2.5 rounded-md border border-sky-400/20">
-                                    CONTAINER: -
-                                </span>
-                            </div>
-                            <h2 id="detailItemName" class="font-extrabold text-lg md:text-xl text-white">-</h2>
-                            <p class="text-xs text-slate-400 mt-1">Asal Pengiriman: <span id="detailOrigin" class="text-slate-300 font-semibold">-</span></p>
-                        </div>
-
-                        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex flex-col justify-center md:text-right min-w-[120px]">
-                            <span class="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Total Muatan</span>
-                            <span id="detailQty" class="text-base md:text-lg font-extrabold text-amber-500 mt-0.5">-</span>
-                            <span id="detailWeight" class="text-xs text-slate-400 font-bold font-mono-custom mt-0.5">-</span>
-                        </div>
-                    </div>
-
-                    <!-- Spesifikasi Tabel Metadata -->
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800/80 text-xs">
-                        <div>
-                            <p class="text-slate-500 font-semibold mb-0.5">Kategori</p>
-                            <p id="detailCategory" class="font-bold text-slate-200">-</p>
-                        </div>
-                        <div>
-                            <p class="text-slate-500 font-semibold mb-0.5">Departemen</p>
-                            <p id="detailDepartment" class="font-bold text-slate-200" style="color: #38bdf8;">-</p>
-                        </div>
-                        <div>
-                            <p class="text-slate-500 font-semibold mb-0.5">Kapal Pengangkut</p>
-                            <p id="detailCarrier" class="font-bold text-slate-200">-</p>
-                        </div>
-                        <div>
-                            <p class="text-slate-500 font-semibold mb-0.5">Tujuan Utama</p>
-                            <p id="detailDestination" class="font-bold text-slate-200" style="color: #f59e0b;">-</p>
-                        </div>
-                        <div>
-                            <p class="text-slate-500 font-semibold mb-0.5">Update Terakhir</p>
-                            <p id="detailLastUpdated" class="font-bold text-slate-200 font-mono-custom">-</p>
-                        </div>
-                    </div>
-
-                    <!-- DETAIL ALAMAT PENERIMA DETAIL (DELIVERY ADDRESS / DELIVER TO) -->
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 space-y-2">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded uppercase tracking-wide">Deliver To / Alamat Penerima</span>
-                            <span class="text-[10px] text-slate-500 font-semibold">Tujuan Akhir Setelah Transit Surabaya HUB</span>
-                        </div>
-                        <div id="detailDeliveryAddress" class="text-xs text-slate-200 font-semibold leading-relaxed bg-slate-900 p-3 rounded-lg border border-slate-800">
-                            -
-                        </div>
-                    </div>
-
-                    <!-- DETAIL FOTO & PETA MULTI-HUB RESPONSIVE GRID -->
-                    <!-- STREAMING_CHUNK: Merancang peta rute skematis Multi-Hub (Wetar -> Kupang -> Surabaya)... -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- TAMPILAN 1: DASHBOARD DETAILED VIEW -->
+                <div id="screenDashboardArea" class="space-y-6">
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-6 relative">
                         
-                        <!-- BAR KOLOM VISUALISASI JALUR LAUT DARI WETAR -->
-                        <div class="md:col-span-2 bg-slate-950 p-4 rounded-xl border border-slate-800 relative overflow-hidden flex flex-col justify-between">
-                            <div class="flex items-center justify-between mb-3">
-                                <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                                    <span class="animate-pulse flex h-2 w-2 rounded-full bg-amber-500"></span>
-                                    Rute Logistik Maritim (Multi-Hub)
+                        <!-- Top Actions inside Card (Hapus & Print Form Buttons) -->
+                        <div class="absolute top-4 right-4 z-10 flex gap-2">
+                            <!-- Toggle Excel view on screen button -->
+                            <button
+                                onclick="switchMainScreen('excel')"
+                                class="text-[10px] font-bold text-amber-400 border border-amber-500/20 bg-amber-500/10 hover:bg-amber-500 hover:text-slate-950 px-2.5 py-1.5 rounded transition-all flex items-center gap-1 active:scale-95"
+                                title="Lihat dokumen Excel aslinya di layar"
+                            >
+                                👁️ Lihat Form Excel
+                            </button>
+
+                            <button
+                                id="btnDeleteShipment"
+                                onclick="confirmDelete()"
+                                class="text-[10px] font-bold text-red-400 border border-red-500/20 bg-red-500/10 hover:bg-red-500 hover:text-white px-2.5 py-1.5 rounded transition-all flex items-center gap-1 active:scale-95"
+                                title="Hapus data kargo ini dari daftar"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                                </svg>
+                                <span id="deleteBtnText">Hapus Manifest</span>
+                            </button>
+                        </div>
+
+                        <!-- Header Info Barang -->
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800 pr-32">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                                    <span id="detailTrackingId" class="text-xs font-mono-custom font-bold text-amber-400 bg-amber-500/10 py-1 px-2.5 rounded-md border border-amber-500/20">
+                                        TRACKING NO: -
+                                    </span>
+                                    <span id="detailContainerId" class="text-xs font-mono-custom font-bold text-sky-400 bg-sky-400/10 py-1 px-2.5 rounded-md border border-sky-400/20">
+                                        CONTAINER: -
+                                    </span>
+                                </div>
+                                <h2 id="detailItemName" class="font-extrabold text-lg md:text-xl text-white">-</h2>
+                                <p class="text-xs text-slate-400 mt-1">Asal Pengiriman: <span id="detailOrigin" class="text-slate-300 font-semibold">-</span></p>
+                            </div>
+
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex flex-col justify-center md:text-right min-w-[120px]">
+                                <span class="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Total Muatan</span>
+                                <span id="detailQty" class="text-base md:text-lg font-extrabold text-amber-500 mt-0.5">-</span>
+                                <span id="detailWeight" class="text-xs text-slate-400 font-bold font-mono-custom mt-0.5">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Spesifikasi Tabel Metadata -->
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800/80 text-xs">
+                            <div>
+                                <p class="text-slate-500 font-semibold mb-0.5">Kategori</p>
+                                <p id="detailCategory" class="font-bold text-slate-200">-</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-500 font-semibold mb-0.5">Departemen</p>
+                                <p id="detailDepartment" class="font-bold text-slate-200" style="color: #38bdf8;">-</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-500 font-semibold mb-0.5">Kapal Pengangkut</p>
+                                <p id="detailCarrier" class="font-bold text-slate-200">-</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-500 font-semibold mb-0.5">Tujuan Utama</p>
+                                <p id="detailDestination" class="font-bold text-slate-200" style="color: #f59e0b;">-</p>
+                            </div>
+                            <div>
+                                <p class="text-slate-500 font-semibold mb-0.5">Update Terakhir</p>
+                                <p id="detailLastUpdated" class="font-bold text-slate-200 font-mono-custom">-</p>
+                            </div>
+                        </div>
+
+                        <!-- DETAIL ALAMAT PENERIMA DETAIL -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 space-y-2">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded uppercase tracking-wide">Deliver To / Alamat Penerima</span>
+                                <span class="text-[10px] text-slate-500 font-semibold">Tujuan Akhir Setelah Transit Surabaya HUB</span>
+                            </div>
+                            <div id="detailDeliveryAddress" class="text-xs text-slate-200 font-semibold leading-relaxed bg-slate-900 p-3 rounded-lg border border-slate-800">
+                                -
+                            </div>
+                        </div>
+
+                        <!-- DETAIL FOTO & PETA MULTI-HUB RESPONSIVE GRID -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            
+                            <!-- BAR KOLOM VISUALISASI JALUR LAUT DARI WETAR -->
+                            <div class="md:col-span-2 bg-slate-950 p-4 rounded-xl border border-slate-800 relative overflow-hidden flex flex-col justify-between">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                                        <span class="animate-pulse flex h-2 w-2 rounded-full bg-amber-500"></span>
+                                        Rute Logistik Maritim (Multi-Hub)
+                                    </h3>
+                                </div>
+
+                                <!-- SCHEMATIC MAP DENGAN 4 NODE HUB LOGISTIK -->
+                                <div class="h-32 bg-slate-900 rounded-lg relative flex items-center justify-between px-6 border border-slate-800 overflow-x-auto">
+                                    <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:1rem_1rem] opacity-25"></div>
+
+                                    <!-- NODE 1: WETAR SITE -->
+                                    <div class="z-10 flex flex-col items-center min-w-[55px]">
+                                        <div id="nodeWetar" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-amber-500 flex items-center justify-center text-sm shadow-lg">
+                                            🏝️
+                                        </div>
+                                        <span class="text-[8px] font-bold text-slate-300 mt-1">Wetar</span>
+                                    </div>
+
+                                    <!-- PENGHUBUNG JALUR 1 (WETAR -> KUPANG) -->
+                                    <div class="flex-1 h-1 min-w-[20px] bg-slate-800 relative rounded-full">
+                                        <div id="lineKupang" class="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                    </div>
+
+                                    <!-- NODE 2: KUPANG HUB -->
+                                    <div class="z-10 flex flex-col items-center min-w-[55px]">
+                                        <div id="nodeKupang" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg">
+                                            ⚓
+                                        </div>
+                                        <span class="text-[8px] font-bold text-slate-300 mt-1">Kupang HUB</span>
+                                    </div>
+
+                                    <!-- PENGHUBUNG JALUR 2 (KUPANG -> SURABAYA) -->
+                                    <div class="flex-1 h-1 min-w-[20px] bg-slate-800 relative rounded-full">
+                                        <div id="lineSurabaya" class="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-400 to-sky-400 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                    </div>
+
+                                    <!-- NODE 3: SURABAYA HUB (SUB) -->
+                                    <div class="z-10 flex flex-col items-center min-w-[55px]">
+                                        <div id="nodeSurabaya" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg">
+                                            🏢
+                                        </div>
+                                        <span class="text-[8px] font-bold text-slate-300 mt-1">SUB HUB</span>
+                                    </div>
+
+                                    <!-- PENGHUBUNG JALUR 3 (SURABAYA -> TUJUAN) -->
+                                    <div class="flex-1 h-1 min-w-[20px] bg-slate-800 relative rounded-full">
+                                        <div id="lineTujuan" class="absolute top-0 left-0 h-full bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                                    </div>
+
+                                    <!-- NODE 4: TUJUAN AKHIR -->
+                                    <div class="z-10 flex flex-col items-center min-w-[55px]">
+                                        <div id="nodeTujuan" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg">
+                                            🎯
+                                        </div>
+                                        <span id="mapDestinationLabel" class="text-[8px] font-bold text-slate-300 mt-1 text-center truncate max-w-[60px]">Tujuan</span>
+                                    </div>
+
+                                    <!-- KAPAL / LOGO BARANG BERGERAK -->
+                                    <div id="mapVesselContainer" class="absolute -top-2 transition-all duration-1000 z-20 pointer-events-none" style="left: 6%;">
+                                        <div class="bg-slate-950 border border-amber-400 p-1 rounded-full shadow-lg floating-ship flex items-center justify-center">
+                                            <span class="text-[10px]">🚢</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span id="ruteIndicator" class="text-[9px] text-amber-500 font-mono-custom font-semibold mt-2 block text-center">Wetar ➔ Kupang ➔ Surabaya ➔ Tujuan</span>
+                            </div>
+
+                            <!-- BAR KOLOM FOTO FISIK MUATAN -->
+                            <div class="md:col-span-1 bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                                <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 mb-2">
+                                    📸 Foto Fisik Kargo
                                 </h3>
-                            </div>
-
-                            <!-- SCHEMATIC MAP DENGAN 4 NODE HUB LOGISTIK -->
-                            <div class="h-32 bg-slate-900 rounded-lg relative flex items-center justify-between px-6 border border-slate-800 overflow-x-auto">
-                                <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:1rem_1rem] opacity-25"></div>
-
-                                <!-- NODE 1: WETAR SITE -->
-                                <div class="z-10 flex flex-col items-center min-w-[55px]">
-                                    <div id="nodeWetar" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-amber-500 flex items-center justify-center text-sm shadow-lg">
-                                        🏝️
-                                    </div>
-                                    <span class="text-[8px] font-bold text-slate-300 mt-1">Wetar</span>
-                                </div>
-
-                                <!-- PENGHUBUNG JALUR 1 (WETAR -> KUPANG) -->
-                                <div class="flex-1 h-1 min-w-[20px] bg-slate-800 relative rounded-full">
-                                    <div id="lineKupang" class="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                                </div>
-
-                                <!-- NODE 2: KUPANG HUB -->
-                                <div class="z-10 flex flex-col items-center min-w-[55px]">
-                                    <div id="nodeKupang" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg">
-                                        ⚓
-                                    </div>
-                                    <span class="text-[8px] font-bold text-slate-300 mt-1">Kupang HUB</span>
-                                </div>
-
-                                <!-- PENGHUBUNG JALUR 2 (KUPANG -> SURABAYA) -->
-                                <div class="flex-1 h-1 min-w-[20px] bg-slate-800 relative rounded-full">
-                                    <div id="lineSurabaya" class="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-400 to-sky-400 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                                </div>
-
-                                <!-- NODE 3: SURABAYA HUB (SUB) -->
-                                <div class="z-10 flex flex-col items-center min-w-[55px]">
-                                    <div id="nodeSurabaya" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg">
-                                        🏢
-                                    </div>
-                                    <span class="text-[8px] font-bold text-slate-300 mt-1">SUB HUB</span>
-                                </div>
-
-                                <!-- PENGHUBUNG JALUR 3 (SURABAYA -> TUJUAN) -->
-                                <div class="flex-1 h-1 min-w-[20px] bg-slate-800 relative rounded-full">
-                                    <div id="lineTujuan" class="absolute top-0 left-0 h-full bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                                </div>
-
-                                <!-- NODE 4: TUJUAN AKHIR -->
-                                <div class="z-10 flex flex-col items-center min-w-[55px]">
-                                    <div id="nodeTujuan" class="w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg">
-                                        🎯
-                                    </div>
-                                    <span id="mapDestinationLabel" class="text-[8px] font-bold text-slate-300 mt-1 text-center truncate max-w-[60px]">Tujuan</span>
-                                </div>
-
-                                <!-- KAPAL / LOGO BARANG BERGERAK -->
-                                <div id="mapVesselContainer" class="absolute -top-2 transition-all duration-1000 z-20 pointer-events-none" style="left: 6%;">
-                                    <div class="bg-slate-950 border border-amber-400 p-1 rounded-full shadow-lg floating-ship flex items-center justify-center">
-                                        <span class="text-[10px]">🚢</span>
-                                    </div>
+                                <div id="detailPhotoContainer" class="flex-1 min-h-[120px] bg-slate-900 rounded-lg border border-slate-800 flex items-center justify-center overflow-hidden relative">
+                                    <!-- Foto render otomatis -->
                                 </div>
                             </div>
-                            <span id="ruteIndicator" class="text-[9px] text-amber-500 font-mono-custom font-semibold mt-2 block text-center">Wetar ➔ Kupang ➔ Surabaya ➔ Tujuan</span>
+
                         </div>
 
-                        <!-- BAR KOLOM FOTO FISIK MUATAN -->
-                        <div class="md:col-span-1 bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 mb-2">
-                                📸 Foto Fisik Kargo
-                            </h3>
-                            <div id="detailPhotoContainer" class="flex-1 min-h-[120px] bg-slate-900 rounded-lg border border-slate-800 flex items-center justify-center overflow-hidden relative">
-                                <!-- Foto render otomatis -->
+                        <!-- PROGRESS MILESTONES -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-xs md:text-sm text-slate-200 flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+                                    Progres Tahap Logistik
+                                </h3>
+                                <span class="text-[10px] text-amber-500 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Milestones</span>
+                            </div>
+
+                            <!-- Horizontal Trackers -->
+                            <div id="horizontalMilestones" class="grid grid-cols-6 gap-2 bg-slate-950 p-4 rounded-xl border border-slate-800/60">
+                                <!-- Renders dynamically -->
+                            </div>
+
+                            <!-- LINIMASA HISTORI DETAILED -->
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-slate-400">Riwayat Perjalanan (Shopee Style)</h4>
+                                <div id="verticalTimeline" class="bg-slate-950 rounded-xl border border-slate-800/80 p-5 space-y-5">
+                                    <!-- Timelines -->
+                                </div>
                             </div>
                         </div>
-
                     </div>
 
-                    <!-- PROGRESS MILESTONES -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-bold text-xs md:text-sm text-slate-200 flex items-center gap-2">
-                                <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
-                                Progres Tahap Logistik
-                            </h3>
-                            <span class="text-[10px] text-amber-500 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Milestones</span>
-                        </div>
-
-                        <!-- Horizontal Trackers -->
-                        <div id="horizontalMilestones" class="grid grid-cols-6 gap-2 bg-slate-950 p-4 rounded-xl border border-slate-800/60">
-                            <!-- Renders dynamically -->
-                        </div>
-
-                        <!-- LINIMASA HISTORI DETAILED -->
-                        <div class="space-y-3">
-                            <h4 class="text-xs font-bold text-slate-400">Riwayat Perjalanan (Shopee Style)</h4>
-                            <div id="verticalTimeline" class="bg-slate-950 rounded-xl border border-slate-800/80 p-5 space-y-5">
-                                <!-- Timelines -->
+                    <!-- ACTION CENTER & SIMULASI CHECKPOINT -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-4">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                            <div>
+                                <h3 class="font-extrabold text-sm md:text-base text-slate-200">🛠️ Simulasi Update Posisi Kontainer</h3>
+                                <p class="text-[10px] md:text-xs text-slate-400">Gunakan bagian di bawah ini untuk memperbarui lokasi barang secara manual.</p>
                             </div>
+                            <button
+                                id="btnAdvance"
+                                onclick="advanceStatus()"
+                                class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-[10px] md:text-xs py-1.5 px-3 rounded-md transition-all shadow shadow-sky-500/10 flex items-center gap-1.5 active:scale-95"
+                            >
+                                🚀 Majukan Status Kontainer
+                            </button>
                         </div>
+
+                        <form id="updateStatusForm" onsubmit="handleStatusSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Pilih Status Baru</label>
+                                <select
+                                    id="statusInput"
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
+                                    required
+                                >
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Draft & Packed">1. Draft & Packed (Gudang Asal)</option>
+                                    <option value="Security Cleared">2. Security Cleared (Pintu Pelabuhan)</option>
+                                    <option value="Loaded onto Vessel">3. Loaded to Vessel (LCT ke Kupang)</option>
+                                    <option value="Arrived at Kupang HUB">4. Arrived Kupang HUB (Transit Kupang)</option>
+                                    <option value="Arrived at SUB HUB">5. Arrived SUB HUB (Sortir Surabaya)</option>
+                                    <option value="Delivered & Received">6. Delivered & Received (Sampai Tujuan)</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Lokasi Saat Ini</label>
+                                <input
+                                    type="text"
+                                    id="locationInput"
+                                    placeholder="Contoh: Tenau Port Kupang / Pelabuhan Tanjung Perak"
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
+                                    required
+                                />
+                            </div>
+
+                            <div class="space-y-1.5 md:col-span-3">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Keterangan / Detail Update</label>
+                                <div class="flex gap-2">
+                                    <input
+                                        type="text"
+                                        id="descInput"
+                                        placeholder="Contoh: Kontainer diturunkan dari LCT dan masuk area penimbunan transit Kupang."
+                                        class="flex-1 bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
+                                    />
+                                    <button
+                                        type="submit"
+                                        class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-5 rounded-lg transition-all text-xs flex items-center justify-center gap-1.5 active:scale-95"
+                                    >
+                                        Kirim Update
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                <!-- ACTION CENTER & SIMULASI CHECKPOINT -->
-                <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-4">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <!-- TAMPILAN 2: EXCEL FORM REALISTIC VIEW (DILAYAR UTAMA) -->
+                <div id="screenExcelArea" class="hidden space-y-4">
+                    <!-- Floating print action top of sheet -->
+                    <div class="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
                         <div>
-                            <h3 class="font-extrabold text-sm md:text-base text-slate-200">🛠️ Simulasi Update Posisi Kontainer</h3>
-                            <p class="text-[10px] md:text-xs text-slate-400">Gunakan bagian di bawah ini untuk memperbarui lokasi barang secara manual.</p>
+                            <h3 class="font-extrabold text-sm text-white">📄 Lembar Form Excel Terintegrasi</h3>
+                            <p class="text-[10px] text-slate-400">Desain persis berkas BKP/BTR Wetar. Klik Cetak di kanan untuk cetak kertas/PDF.</p>
                         </div>
                         <button
-                            id="btnAdvance"
-                            onclick="advanceStatus()"
-                            class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-[10px] md:text-xs py-1.5 px-3 rounded-md transition-all shadow shadow-sky-500/10 flex items-center gap-1.5 active:scale-95"
+                            onclick="window.print()"
+                            class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-lg shadow-lg active:scale-95 transition-all flex items-center gap-1.5"
                         >
-                            🚀 Majukan Status Kontainer
+                            🖨️ Cetak / Simpan PDF (A4)
                         </button>
                     </div>
 
-                    <form id="updateStatusForm" onsubmit="handleStatusSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="space-y-1.5">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Pilih Status Baru</label>
-                            <select
-                                id="statusInput"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
-                                required
-                            >
-                                <option value="">-- Pilih Status --</option>
-                                <option value="Draft & Packed">1. Draft & Packed (Gudang Asal)</option>
-                                <option value="Security Cleared">2. Security Cleared (Pintu Pelabuhan)</option>
-                                <option value="Loaded onto Vessel">3. Loaded to Vessel (LCT ke Kupang)</option>
-                                <option value="Arrived at Kupang HUB">4. Arrived Kupang HUB (Transit Kupang)</option>
-                                <option value="Arrived at SUB HUB">5. Arrived SUB HUB (Sortir Surabaya)</option>
-                                <option value="Delivered & Received">6. Delivered & Received (Sampai Tujuan)</option>
-                            </select>
-                        </div>
-
-                        <div class="space-y-1.5">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Lokasi Saat Ini</label>
-                            <input
-                                type="text"
-                                id="locationInput"
-                                placeholder="Contoh: Tenau Port Kupang / Pelabuhan Tanjung Perak"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
-                                required
-                            />
-                        </div>
-
-                        <div class="space-y-1.5 md:col-span-3">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Keterangan / Detail Update</label>
-                            <div class="flex gap-2">
-                                <input
-                                    type="text"
-                                    id="descInput"
-                                    placeholder="Contoh: Kontainer diturunkan dari LCT dan masuk area penimbunan transit Kupang."
-                                    class="flex-1 bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
-                                />
-                                <button
-                                    type="submit"
-                                    class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-5 rounded-lg transition-all text-xs flex items-center justify-center gap-1.5 active:scale-95"
-                                >
-                                    Kirim Update
-                                </button>
+                    <!-- CONTAINER PALE WHITE EXCEL PAPER VIEW -->
+                    <div class="bg-white text-black p-8 rounded-xl border border-slate-300 shadow-2xl overflow-x-auto min-w-[780px]">
+                        
+                        <!-- Header Form Merdeka -->
+                        <div class="grid grid-cols-4 items-center border-b-2 border-black pb-4 mb-3 text-[10px]">
+                            <div class="col-span-1 flex space-x-1 items-center">
+                                <span class="font-black text-lg tracking-tight text-yellow-600">MERDEKA</span>
+                                <span class="text-[7px] leading-tight font-extrabold text-gray-500">COPPER GOLD</span>
+                            </div>
+                            <div class="col-span-2 text-center">
+                                <h2 class="font-black text-[11px] tracking-wide">OUTBOUND FORM MATERIAL REQUEST FROM BKP/BTR WETAR SITE</h2>
+                                <p class="text-[8px] font-black text-gray-700">DELIVER TO VENDOR, CONTRACTOR DOMESTIC AND INTERNATIONAL</p>
+                            </div>
+                            <div class="col-span-1 text-right text-[8px] font-bold">
+                                <p>Date: <span id="excelPrintDate">-</span></p>
+                                <p>REF NR REGISTER NUMBER: <span id="excelPrintRef" class="underline">LOG-BKP/BTR-000</span></p>
                             </div>
                         </div>
-                    </form>
+
+                        <!-- HIGHLIGHT CONTAINER & TRACKING -->
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-center font-black text-xs">
+                            <div class="bg-yellow-300 p-2 border border-black rounded shadow-sm uppercase">
+                                NO KONTAINER: <span id="excelContainerHighlight">-</span>
+                            </div>
+                            <div class="bg-emerald-300 p-2 border border-black rounded shadow-sm uppercase">
+                                TRACKING NO: <span id="excelTrackingHighlight">-</span>
+                            </div>
+                        </div>
+
+                        <!-- EXCEL GRID TABLE -->
+                        <table class="w-full border-collapse border-2 border-black text-center text-[9px] mb-4">
+                            <thead>
+                                <tr class="bg-gray-100 font-extrabold border-b-2 border-black">
+                                    <th class="border border-black p-1 w-6">NO</th>
+                                    <th class="border border-black p-1">Originator/User</th>
+                                    <th class="border border-black p-1">Tracking ID / SKU</th>
+                                    <th class="border border-black p-1">Cost Code / Center</th>
+                                    <th class="border border-black p-1 w-8">QTY ITEM</th>
+                                    <th class="border border-black p-1">COMP DESCRIPTION</th>
+                                    <th class="border border-black p-1 w-8">QTY PCKG</th>
+                                    <th class="border border-black p-1">Type Package [UOM]</th>
+                                    <th class="border border-black p-1">Length [CM]</th>
+                                    <th class="border border-black p-1">Width [CM]</th>
+                                    <th class="border border-black p-1">Height [CM]</th>
+                                    <th class="border border-black p-1">Total Volume [CM3]</th>
+                                    <th class="border border-black p-1">Total Weight [KG]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-black font-semibold h-40">
+                                    <td class="border border-black p-1">1</td>
+                                    <td id="excelUser" class="border border-black p-1">-</td>
+                                    <td id="excelTrackId" class="border border-black p-1 font-bold">-</td>
+                                    <td id="excelCost" class="border border-black p-1">-</td>
+                                    <td id="excelQtyItem" class="border border-black p-1">-</td>
+                                    <td id="excelItemDesc" class="border border-black p-1 text-left font-bold pl-2">-</td>
+                                    <td id="excelQtyPckg" class="border border-black p-1">-</td>
+                                    <td id="excelUOM" class="border border-black p-1">-</td>
+                                    <td id="excelLen" class="border border-black p-1">-</td>
+                                    <td id="excelWid" class="border border-black p-1">-</td>
+                                    <td id="excelHei" class="border border-black p-1">-</td>
+                                    <td id="excelVol" class="border border-black p-1 font-bold">-</td>
+                                    <td id="excelWt" class="border border-black p-1 font-bold">-</td>
+                                </tr>
+                                <tr class="bg-gray-50 font-extrabold border-t-2 border-black text-[9px]">
+                                    <td colspan="6" class="border border-black p-1 text-right pr-4 uppercase">TOTAL PACKAGE :</td>
+                                    <td id="excelTotalPkg" class="border border-black p-1">-</td>
+                                    <td colspan="4" class="border border-black p-1 text-right pr-4 uppercase">TOTAL VOLUME & WEIGHT :</td>
+                                    <td id="excelTotalVol" class="border border-black p-1">-</td>
+                                    <td id="excelTotalWt" class="border border-black p-1">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- FOTO, ALAMAT & REMARKS GRID -->
+                        <div class="grid grid-cols-3 gap-3 border border-black p-3 rounded mb-4 text-[9px] text-left">
+                            <div>
+                                <h4 class="font-extrabold border-b border-black pb-1 mb-2">📸 FOTO FISIK CARGO</h4>
+                                <div id="excelPhotoFrame" class="w-full h-32 border border-gray-300 rounded flex items-center justify-center overflow-hidden bg-gray-50">
+                                    <span class="text-gray-400 italic">Tidak ada foto</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-extrabold border-b border-black pb-1 mb-2">🏡 DETAILS DELIVERY ADDRESS / DELIVER TO</h4>
+                                <p id="excelAddressCell" class="font-bold leading-relaxed text-gray-800">-</p>
+                            </div>
+                            <div>
+                                <h4 class="font-extrabold border-b border-black pb-1 mb-2">📞 PIC & REMARKS</h4>
+                                <p class="font-bold">PIC Kontak:</p>
+                                <p id="excelPhoneCell" class="mb-2">-</p>
+                                <p class="font-bold">Remarks Tambahan:</p>
+                                <p id="excelRemarksCell" class="italic text-gray-700">-</p>
+                            </div>
+                        </div>
+
+                        <!-- APPROVAL BOX DENGAN TANDA TANGAN DIGITAL REALISTIS -->
+                        <div class="border-2 border-black rounded overflow-hidden text-[9px]">
+                            <div class="bg-black text-white text-center py-1 font-extrabold uppercase tracking-wide">
+                                Hand Over Detail & Approval Box
+                            </div>
+                            <div class="grid grid-cols-4 text-center border-t border-black divide-x divide-black h-24 bg-white">
+                                <!-- Originator Sign -->
+                                <div class="p-2 flex flex-col justify-between items-center h-full">
+                                    <p class="font-bold uppercase text-[7px]">Prepared / Submitted By</p>
+                                    <!-- Drawing real pen scribble using SVG -->
+                                    <svg class="w-16 h-8 text-blue-600" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M10,25 Q25,5 35,22 T55,18 T75,25 T90,15" stroke-linecap="round"/>
+                                        <path d="M20,20 L80,20" stroke-width="1" stroke-dasharray="2,2"/>
+                                    </svg>
+                                    <div class="text-[7px] text-left w-full border-t border-gray-300 pt-0.5">
+                                        <p>Name: <span id="excelSignUserName" class="font-bold">-</span></p>
+                                        <p>Dept: <span id="excelSignUserDept">-</span></p>
+                                    </div>
+                                </div>
+
+                                <!-- Manager Sign -->
+                                <div class="p-2 flex flex-col justify-between items-center h-full">
+                                    <p class="font-bold uppercase text-[7px]">Manager Dept Approval</p>
+                                    <!-- Drawing manager signature in black pen -->
+                                    <svg class="w-16 h-8 text-slate-800" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M15,30 C30,10 40,5 45,25 C50,35 60,10 70,22 C75,28 85,15 90,30" stroke-linecap="round"/>
+                                    </svg>
+                                    <div class="text-[7px] text-left w-full border-t border-gray-300 pt-0.5">
+                                        <p>Name: <span id="excelSignMgrName" class="font-bold">-</span></p>
+                                        <p>Dept: <span id="excelSignMgrDept">-</span></p>
+                                    </div>
+                                </div>
+
+                                <!-- Warehouse Sign -->
+                                <div class="p-2 flex flex-col justify-between items-center h-full">
+                                    <p class="font-bold uppercase text-[7px]">Received by Warehouse/Logistic</p>
+                                    <div class="text-gray-300 text-[8px] italic my-auto">STAMP & SIGN HERE</div>
+                                    <div class="text-[7px] text-left w-full border-t border-gray-300 pt-0.5">
+                                        <p>Name: ________________</p>
+                                        <p>Dept: Logistics</p>
+                                    </div>
+                                </div>
+
+                                <!-- Destination Sign -->
+                                <div class="p-2 flex flex-col justify-between items-center h-full">
+                                    <p class="font-bold uppercase text-[7px]">Received at Destination by</p>
+                                    <div class="text-gray-300 text-[8px] italic my-auto">STAMP & SIGN HERE</div>
+                                    <div class="text-[7px] text-left w-full border-t border-gray-300 pt-0.5">
+                                        <p>Name: ________________</p>
+                                        <p>Dept: Vendor / Site</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- REASON FOR OUTBOUND CHECKBOXES -->
+                        <div class="mt-4 border border-black p-2 rounded bg-gray-50 grid grid-cols-5 text-[8px] font-bold text-left">
+                            <div class="flex items-center space-x-1">
+                                <input type="checkbox" id="exCheckRepair" disabled> <label for="exCheckRepair">REPAIR</label>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <input type="checkbox" id="exCheckCalibration" disabled> <label for="exCheckCalibration">CALIBRATION</label>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <input type="checkbox" id="exCheckReturn" disabled> <label for="exCheckReturn">RETURN</label>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <input type="checkbox" id="exCheckScrap" disabled> <label for="exCheckScrap">SCRAP</label>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <input type="checkbox" id="exCheckOther" disabled> <label for="exCheckOther">OTHER / LAIN-LAIN</label>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
@@ -507,10 +702,164 @@
         </div>
     </main>
 
+    <!-- AREA CETAK FORM OUTBOUND BERGAYA EXCEL PREMIUM (HIDDEN ON SCREEN, ONLY VISIBLE ON PRINT) -->
+    <div id="printAreaContainer" class="hidden w-[210mm] min-h-[297mm] p-6 bg-white text-black text-[10px] leading-snug mx-auto border border-gray-300">
+        <!-- Header Print Area identical to Excel View -->
+        <div class="grid grid-cols-4 items-center border-b-2 border-black pb-4 mb-3">
+            <div class="col-span-1 flex space-x-1 items-center">
+                <span class="font-extrabold text-2xl tracking-tight text-yellow-600">MERDEKA</span>
+                <span class="text-[8px] leading-tight font-bold text-gray-500">COPPER GOLD</span>
+            </div>
+            <div class="col-span-2 text-center">
+                <h2 class="font-extrabold text-xs tracking-wide">OUTBOUND FORM MATERIAL REQUEST FROM BKP/BTR WETAR SITE</h2>
+                <p class="text-[9px] font-bold text-gray-700">DELIVER TO VENDOR, CONTRACTOR DOMESTIC AND INTERNATIONAL</p>
+            </div>
+            <div class="col-span-1 text-right text-[8px] font-bold">
+                <p>Date: <span id="printDateStr">-</span></p>
+                <p>REF NR REGISTER NUMBER: <span id="printRegisterNum" class="underline">LOG-BKP/BTR-000</span></p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-yellow-300 p-2 text-center font-extrabold text-sm border border-black rounded shadow-sm">
+                NO KONTAINER: <span id="printContainerSorotan">-</span>
+            </div>
+            <div class="bg-emerald-300 p-2 text-center font-extrabold text-sm border border-black rounded shadow-sm">
+                TRACKING NO: <span id="printTrackingSorotan">-</span>
+            </div>
+        </div>
+
+        <table class="w-full border-collapse border-2 border-black text-center mb-4">
+            <thead>
+                <tr class="bg-gray-100 font-extrabold border-b-2 border-black text-[9px]">
+                    <th class="border border-black p-1 w-8">NO</th>
+                    <th class="border border-black p-1">Originator/User</th>
+                    <th class="border border-black p-1">Tracking ID / SKU</th>
+                    <th class="border border-black p-1">Cost Code / Center</th>
+                    <th class="border border-black p-1 w-10">QTY ITEM</th>
+                    <th class="border border-black p-1">COMP DESCRIPTION</th>
+                    <th class="border border-black p-1 w-10">QTY PCKG</th>
+                    <th class="border border-black p-1">Type Package [UOM]</th>
+                    <th class="border border-black p-1">Length [CM]</th>
+                    <th class="border border-black p-1">Width [CM]</th>
+                    <th class="border border-black p-1">Height [CM]</th>
+                    <th class="border border-black p-1">Total Volume [CM3]</th>
+                    <th class="border border-black p-1">Total Weight [KG]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-b border-black font-semibold h-48">
+                    <td class="border border-black p-1">1</td>
+                    <td id="printUser" class="border border-black p-1">-</td>
+                    <td id="printTrack" class="border border-black p-1 font-mono-custom font-bold">-</td>
+                    <td id="printCostCode" class="border border-black p-1">-</td>
+                    <td id="printQtyItem" class="border border-black p-1">-</td>
+                    <td id="printDescItem" class="border border-black p-1 text-left font-bold pl-2">-</td>
+                    <td id="printQtyPckg" class="border border-black p-1">-</td>
+                    <td id="printTypePackage" class="border border-black p-1">-</td>
+                    <td id="printLen" class="border border-black p-1">-</td>
+                    <td id="printWid" class="border border-black p-1">-</td>
+                    <td id="printHei" class="border border-black p-1">-</td>
+                    <td id="printVolumeTotal" class="border border-black p-1 font-bold">-</td>
+                    <td id="printWeightTotal" class="border border-black p-1 font-bold">-</td>
+                </tr>
+                <tr class="bg-gray-50 font-extrabold border-t-2 border-black text-[9px]">
+                    <td colspan="6" class="border border-black p-1 text-right pr-4 uppercase">TOTAL PACKAGE :</td>
+                    <td id="printTotalPackageSum" class="border border-black p-1">1</td>
+                    <td colspan="4" class="border border-black p-1 text-right pr-4 uppercase">TOTAL VOLUME & WEIGHT :</td>
+                    <td id="printVolumeSum" class="border border-black p-1">-</td>
+                    <td id="printWeightSum" class="border border-black p-1">-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="grid grid-cols-3 gap-3 border border-black p-3 rounded mb-4">
+            <div class="col-span-1">
+                <h4 class="font-extrabold border-b border-black pb-1 mb-2 text-[9px]">📸 FOTO FISIK CARGO</h4>
+                <div id="printPhotoCell" class="w-full h-36 border border-gray-300 rounded flex items-center justify-center overflow-hidden bg-gray-50"></div>
+            </div>
+            <div class="col-span-1">
+                <h4 class="font-extrabold border-b border-black pb-1 mb-2 text-[9px]">🏡 DETAILS DELIVERY ADDRESS / DELIVER TO</h4>
+                <p id="printAddressCell" class="text-[9px] leading-relaxed font-semibold">-</p>
+            </div>
+            <div class="col-span-1">
+                <h4 class="font-extrabold border-b border-black pb-1 mb-2 text-[9px]">📞 PIC & REMARKS</h4>
+                <p class="font-bold">PIC Kontak:</p>
+                <p id="printPhoneCell" class="mb-2">-</p>
+                <p class="font-bold">Remarks Tambahan:</p>
+                <p id="printRemarksCell" class="italic">-</p>
+            </div>
+        </div>
+
+        <div class="border-2 border-black rounded overflow-hidden">
+            <div class="bg-black text-white text-center py-1 font-extrabold text-[9px] uppercase tracking-wide">
+                Hand Over Detail & Approval Box
+            </div>
+            <div class="grid grid-cols-4 text-center border-t border-black divide-x divide-black h-24">
+                <div class="p-2 flex flex-col justify-between items-center">
+                    <p class="font-bold text-[8px] uppercase">Prepared / Submitted By</p>
+                    <svg class="w-16 h-8 text-blue-600" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10,25 Q25,5 35,22 T55,18 T75,25 T90,15" stroke-linecap="round"/>
+                    </svg>
+                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
+                        <p>Name: <span id="signOriginatorName" class="font-bold">-</span></p>
+                        <p>Dept: <span id="signOriginatorDept">-</span></p>
+                    </div>
+                </div>
+
+                <div class="p-2 flex flex-col justify-between items-center">
+                    <p class="font-bold text-[8px] uppercase">Manager Dept Approval</p>
+                    <svg class="w-16 h-8 text-slate-800" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M15,30 C30,10 40,5 45,25 C50,35 60,10 70,22 C75,28 85,15 90,30" stroke-linecap="round"/>
+                    </svg>
+                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
+                        <p>Name: <span id="signManagerName" class="font-bold">-</span></p>
+                        <p>Dept: <span id="signManagerDept">-</span></p>
+                    </div>
+                </div>
+
+                <div class="p-2 flex flex-col justify-between items-center">
+                    <p class="font-bold text-[8px] uppercase">Received by Warehouse/Logistic</p>
+                    <div class="text-gray-300 text-[8px] italic my-auto">STAMP & SIGN HERE</div>
+                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
+                        <p>Name: ________________</p>
+                        <p>Dept: Logistics</p>
+                    </div>
+                </div>
+
+                <div class="p-2 flex flex-col justify-between items-center">
+                    <p class="font-bold text-[8px] uppercase">Received at Destination by</p>
+                    <div class="text-gray-300 text-[8px] italic my-auto">STAMP & SIGN HERE</div>
+                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
+                        <p>Name: ________________</p>
+                        <p>Dept: Vendor / Site</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 border border-black p-2 rounded bg-gray-50 grid grid-cols-5 text-[8px] font-bold">
+            <div class="flex items-center space-x-1">
+                <input type="checkbox" id="checkRepair" disabled> <label for="checkRepair">REPAIR</label>
+            </div>
+            <div class="flex items-center space-x-1">
+                <input type="checkbox" id="checkCalibration" disabled> <label for="checkCalibration">CALIBRATION</label>
+            </div>
+            <div class="flex items-center space-x-1">
+                <input type="checkbox" id="checkReturn" disabled> <label for="checkReturn">RETURN</label>
+            </div>
+            <div class="flex items-center space-x-1">
+                <input type="checkbox" id="checkScrap" disabled> <label for="checkScrap">SCRAP</label>
+            </div>
+            <div class="flex items-center space-x-1">
+                <input type="checkbox" id="checkOther" disabled> <label for="checkOther">OTHER / LAIN-LAIN</label>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL POPUP: REGISTRASI OUTBOUND BARU -->
     <div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-sm p-4 no-print">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-y-auto max-h-[90vh] shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-            <!-- Modal Header -->
             <div class="bg-slate-950 p-4 border-b border-slate-800 flex items-center justify-between sticky top-0 z-10">
                 <div>
                     <h3 class="font-bold text-sm md:text-base text-white">Daftarkan Outbound & Kontainer Baru</h3>
@@ -519,7 +868,6 @@
                 <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-200 text-lg font-bold">✕</button>
             </div>
 
-            <!-- Modal Form -->
             <form onsubmit="handleNewShipment(event)" class="p-6 space-y-4 text-xs">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1">
@@ -527,12 +875,12 @@
                         <input type="text" id="newOriginator" value="Bayu Aji Sena" placeholder="Nama lengkap pengaju kargo" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none" required>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Tracking ID (Kustom/Otomatis)</label>
+                        <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Tracking ID (Otomatis)</label>
                         <input type="text" id="newId" placeholder="Contoh: BTR-MOB-PLT-SWI-516" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Nomor Kontainer</label>
-                        <input type="text" id="newContainerId" placeholder="Contoh: TAKU2315722" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none">
+                        <input type="text" id="newContainerId" placeholder="Contoh: TAKU2315722" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none" required>
                     </div>
                     <div class="space-y-1">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Cost Code / Center</label>
@@ -573,7 +921,7 @@
                             <input type="number" id="newQty" value="1" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none" required>
                         </div>
                         <div class="space-y-1">
-                            <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Satuan</label>
+                            <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Satuan / UOM</label>
                             <select id="newUnit" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none">
                                 <option value="Box">Box</option>
                                 <option value="Pcs">Pcs</option>
@@ -613,10 +961,10 @@
                     <div class="space-y-1">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Tujuan Pengiriman</label>
                         <select id="newDestination" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none">
+                            <option value="Surabaya HUB (Hanya Transit SUB)">Surabaya HUB (Hanya Transit SUB)</option>
                             <option value="BSI (Bumi Suksesindo)">BSI (Bumi Suksesindo)</option>
                             <option value="PANI Gold Project">PANI Gold Project</option>
                             <option value="Konawe SCM">Konawe SCM</option>
-                            <option value="Surabaya HUB (Hanya Transit SUB)">Hanya Transit Surabaya HUB</option>
                         </select>
                     </div>
 
@@ -658,7 +1006,7 @@
                     <!-- INPUT ALAMAT PENERIMA KUSTOM -->
                     <div class="space-y-1 sm:col-span-2">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Detail Alamat Penerima / Deliver To (Vendor, Alamat, Telp)</label>
-                        <textarea id="newDeliveryAddress" rows="3" placeholder="Contoh: PT HARTEKPRIMA LISTRINDO, JL RAYA MARGOREJO INDAH NO 122..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none" required></textarea>
+                        <textarea id="newDeliveryAddress" rows="3" placeholder="Contoh: PT HARTEKPRIMA LISTRINDO, JL RAYA MARGOREJO INDAH NO 122..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none" required>PT HARTEKPRIMA LISTRINDO, JL RAYA MARGOREJO INDAH NO 122, KAV.D105 SURABAYA 60239, PHONE (6231)8486 111 FAX (6231)848 4789</textarea>
                     </div>
                 </div>
 
@@ -670,183 +1018,6 @@
         </div>
     </div>
 
-    <!-- AREA CETAK FORM OUTBOUND BERGAYA EXCEL PREMIUM (HIDDEN ON SCREEN, ONLY VISIBLE ON PRINT) -->
-    <div id="printAreaContainer" class="hidden w-[210mm] min-h-[297mm] p-6 bg-white text-black text-[10px] leading-snug mx-auto border border-gray-300 shadow-md">
-        <!-- Logo Area & Header Form -->
-        <div class="grid grid-cols-4 items-center border-b-2 border-black pb-4 mb-3">
-            <div class="col-span-1 flex space-x-1 items-center">
-                <span class="font-extrabold text-2xl tracking-tight text-yellow-600">MERDEKA</span>
-                <span class="text-[8px] leading-tight font-bold text-gray-500">COPPER GOLD</span>
-            </div>
-            <div class="col-span-2 text-center">
-                <h2 class="font-extrabold text-xs tracking-wide">OUTBOUND FORM MATERIAL REQUEST FROM BKP/BTR WETAR SITE</h2>
-                <p class="text-[9px] font-bold text-gray-700">DELIVER TO VENDOR, CONTRACTOR DOMESTIC AND INTERNATIONAL</p>
-            </div>
-            <div class="col-span-1 text-right text-[8px] font-bold">
-                <p>Date: <span id="printDateStr">Monday, 05 January 2026</span></p>
-                <p>REF NR REGISTER NUMBER: <span id="printRegisterNum" class="underline">LOG-BKP/BTR-000</span></p>
-            </div>
-        </div>
-
-        <!-- Sorotan Container & Tracking (Kuning & Hijau Excel) -->
-        <div class="grid grid-cols-2 gap-4 mb-4">
-            <div class="bg-yellow-300 p-2 text-center font-extrabold text-sm border border-black rounded shadow-sm">
-                NO KONTAINER: <span id="printContainerSorotan">-</span>
-            </div>
-            <div class="bg-emerald-300 p-2 text-center font-extrabold text-sm border border-black rounded shadow-sm">
-                TRACKING NO: <span id="printTrackingSorotan">-</span>
-            </div>
-        </div>
-
-        <!-- Tabel Utama Excel Form -->
-        <table class="w-full border-collapse border-2 border-black text-center mb-4">
-            <thead>
-                <tr class="bg-gray-100 font-extrabold border-b-2 border-black text-[9px]">
-                    <th class="border border-black p-1 w-8">NO</th>
-                    <th class="border border-black p-1">Originator/User</th>
-                    <th class="border border-black p-1">Tracking ID / SKU</th>
-                    <th class="border border-black p-1">Cost Code / Center</th>
-                    <th class="border border-black p-1 w-10">QTY ITEM</th>
-                    <th class="border border-black p-1">COMP DESCRIPTION</th>
-                    <th class="border border-black p-1 w-10">QTY PCKG</th>
-                    <th class="border border-black p-1">Type Package [UOM]</th>
-                    <th class="border border-black p-1">Length [CM]</th>
-                    <th class="border border-black p-1">Width [CM]</th>
-                    <th class="border border-black p-1">Height [CM]</th>
-                    <th class="border border-black p-1">Total Volume [CM3]</th>
-                    <th class="border border-black p-1">Total Weight [KG]</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-b border-black font-semibold h-48">
-                    <td class="border border-black p-1 text-center">1</td>
-                    <td id="printUser" class="border border-black p-1 text-center">-</td>
-                    <td id="printTrack" class="border border-black p-1 text-center font-mono-custom font-bold">-</td>
-                    <td id="printCostCode" class="border border-black p-1 text-center">-</td>
-                    <td id="printQtyItem" class="border border-black p-1 text-center">-</td>
-                    <td id="printDescItem" class="border border-black p-1 text-left font-bold pl-2">-</td>
-                    <td id="printQtyPckg" class="border border-black p-1 text-center">-</td>
-                    <td id="printTypePackage" class="border border-black p-1 text-center">-</td>
-                    <td id="printLen" class="border border-black p-1 text-center">-</td>
-                    <td id="printWid" class="border border-black p-1 text-center">-</td>
-                    <td id="printHei" class="border border-black p-1 text-center">-</td>
-                    <td id="printVolumeTotal" class="border border-black p-1 text-center font-bold">-</td>
-                    <td id="printWeightTotal" class="border border-black p-1 text-center font-bold">-</td>
-                </tr>
-                <!-- Total Row -->
-                <tr class="bg-gray-50 font-extrabold border-t-2 border-black text-[9px]">
-                    <td colspan="6" class="border border-black p-1 text-right pr-4 uppercase">TOTAL PACKAGE :</td>
-                    <td id="printTotalPackageSum" class="border border-black p-1 text-center">1</td>
-                    <td colspan="4" class="border border-black p-1 text-right pr-4 uppercase">TOTAL VOLUME & WEIGHT :</td>
-                    <td id="printVolumeSum" class="border border-black p-1 text-center">-</td>
-                    <td id="printWeightSum" class="border border-black p-1 text-center">-</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Visualisasi Foto & Alamat & Kontak Grid -->
-        <div class="grid grid-cols-3 gap-3 border border-black p-3 rounded mb-4">
-            <div class="col-span-1">
-                <h4 class="font-extrabold border-b border-black pb-1 mb-2 text-[9px]">📸 FOTO FISIK CARGO</h4>
-                <div id="printPhotoCell" class="w-full h-36 border border-gray-300 rounded flex items-center justify-center overflow-hidden bg-gray-50">
-                    <!-- Foto embed -->
-                </div>
-            </div>
-            <div class="col-span-1">
-                <h4 class="font-extrabold border-b border-black pb-1 mb-2 text-[9px]">🏡 DETAILS DELIVERY ADDRESS / DELIVER TO</h4>
-                <p id="printAddressCell" class="text-[9px] leading-relaxed font-semibold">-</p>
-            </div>
-            <div class="col-span-1">
-                <h4 class="font-extrabold border-b border-black pb-1 mb-2 text-[9px]">📞 PIC & REMARKS</h4>
-                <p class="font-bold">PIC Kontak:</p>
-                <p id="printPhoneCell" class="mb-2">-</p>
-                <p class="font-bold">Remarks Tambahan:</p>
-                <p id="printRemarksCell" class="italic">-</p>
-            </div>
-        </div>
-
-        <!-- HAND OVER DETAILS & SIGNATURE (Tanda Tangan) -->
-        <div class="border-2 border-black rounded overflow-hidden">
-            <div class="bg-black text-white text-center py-1 font-extrabold text-[9px] uppercase tracking-wide">
-                Hand Over Detail & Approval Box
-            </div>
-            <div class="grid grid-cols-4 text-center border-t border-black divide-x divide-black h-24">
-                <!-- Originator Sign -->
-                <div class="p-2 flex flex-col justify-between items-center">
-                    <p class="font-bold text-[8px] uppercase">Prepared / Submitted By</p>
-                    <div class="w-16 h-10 border border-gray-100 flex items-center justify-center italic text-blue-500 font-serif text-sm">
-                        Signed
-                    </div>
-                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
-                        <p>Name: <span id="signOriginatorName" class="font-bold">-</span></p>
-                        <p>Dept: <span id="signOriginatorDept">-</span></p>
-                    </div>
-                </div>
-
-                <!-- Manager Sign -->
-                <div class="p-2 flex flex-col justify-between items-center">
-                    <p class="font-bold text-[8px] uppercase">Manager Dept Approval</p>
-                    <div class="w-16 h-10 border border-gray-100 flex items-center justify-center italic text-blue-500 font-serif text-sm">
-                        Approved
-                    </div>
-                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
-                        <p>Name: <span id="signManagerName" class="font-bold">Wasiman W</span></p>
-                        <p>Dept: <span id="signManagerDept">Maintenance</span></p>
-                    </div>
-                </div>
-
-                <!-- Warehouse/Logistic Sign -->
-                <div class="p-2 flex flex-col justify-between items-center">
-                    <p class="font-bold text-[8px] uppercase">Received by Warehouse/Logistic</p>
-                    <div class="w-16 h-10 border border-gray-100 flex items-center justify-center text-gray-300 text-[8px]">
-                        Stamp & Sign Here
-                    </div>
-                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
-                        <p>Name: ________________</p>
-                        <p>Dept: Logistics</p>
-                    </div>
-                </div>
-
-                <!-- Destination Sign -->
-                <div class="p-2 flex flex-col justify-between items-center">
-                    <p class="font-bold text-[8px] uppercase">Received at Destination by</p>
-                    <div class="w-16 h-10 border border-gray-100 flex items-center justify-center text-gray-300 text-[8px]">
-                        Stamp & Sign Here
-                    </div>
-                    <div class="text-[8px] text-left w-full border-t border-gray-300 pt-1">
-                        <p>Name: ________________</p>
-                        <p>Dept: Vendor / Site</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Outbound Reason Checklist -->
-        <div class="mt-4 border border-black p-2 rounded bg-gray-50 grid grid-cols-5 text-[8px] font-bold">
-            <div class="flex items-center space-x-1">
-                <input type="checkbox" id="checkRepair" disabled> <label for="checkRepair">REPAIR</label>
-            </div>
-            <div class="flex items-center space-x-1">
-                <input type="checkbox" id="checkCalibration" disabled> <label for="checkCalibration">CALIBRATION</label>
-            </div>
-            <div class="flex items-center space-x-1">
-                <input type="checkbox" id="checkReturn" disabled> <label for="checkReturn">RETURN</label>
-            </div>
-            <div class="flex items-center space-x-1">
-                <input type="checkbox" id="checkScrap" disabled> <label for="checkScrap">SCRAP</label>
-            </div>
-            <div class="flex items-center space-x-1">
-                <input type="checkbox" id="checkOther" disabled> <label for="checkOther">OTHER / LAIN-LAIN</label>
-            </div>
-        </div>
-
-        <!-- Printable close button for print-screen view -->
-        <div class="mt-4 text-center no-print">
-            <button onclick="window.print()" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-lg shadow-md mr-3">Cetak Sekarang (Print / Save PDF)</button>
-            <button onclick="closePrintView()" class="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-lg shadow-md">Kembali ke Dashboard</button>
-        </div>
-    </div>
-
     <!-- FOOTER -->
     <footer class="bg-slate-900 border-t border-slate-800 py-6 mt-12 text-center text-xs text-slate-500 no-print">
         <p>© 2026 Wetar Island Copper Mine Logistical System. All Rights Reserved.</p>
@@ -855,13 +1026,15 @@
 
     <!-- LOGIKA JAVASCRIPT UTAMA (STATE MANAGEMENT) -->
     <script>
-        // FORCE AUTO-CLEAR UNTUK CACHE LAMA "TON" BERMASALAH
+        // SATUAN BERAT BARU DAN CLEAR FORCE CACHE UNTUK KEY LAMA 'wetar_shipments_clean_v8_kg' atau 'wetar_shipments'
+        if (localStorage.getItem('wetar_shipments_clean_v8_kg')) {
+            localStorage.removeItem('wetar_shipments_clean_v8_kg');
+        }
         if (localStorage.getItem('wetar_shipments')) {
-            // Hapus paksa memori lama dari localstorage demi mengganti ke sistem KG bersih
             localStorage.removeItem('wetar_shipments');
         }
 
-        // Data pengiriman default jika ingin dimuat simulasi demo (Sesuai berkas riil Radiator Wetar)
+        // Data pengiriman bawaan berkualitas tinggi sesuai dengan image_2d5902.png (Radiator asli)
         const DEFAULT_SHIPMENTS = [
             {
                 id: "BTR-MOB-PLT-SWI-516",
@@ -885,44 +1058,66 @@
                 approver: "Wasiman W",
                 phone: "Nashrul Alfan",
                 deliveryAddress: "PT HARTEKPRIMA LISTRINDO, JL RAYA MARGOREJO INDAH NO 122, KAV.D105 SURABAYA 60239, PHONE (6231)8486 111 FAX (6231)848 4789",
-                currentStatusIndex: 2, // 0 to 5
+                currentStatusIndex: 2, // Loaded onto Vessel
                 lastUpdated: "2026-07-17 11:30 WIT",
-                // Gambar peti kayu kotak default (Crate/Palet) menggunakan SVG Base64 minimalis agar super awet di LocalStorage
                 photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%231e293b'/><rect x='40' y='30' width='220' height='140' fill='%2378350f' stroke='%23f59e0b' stroke-width='4'/><line x1='40' y1='30' x2='260' y2='170' stroke='%23d97706' stroke-width='3'/><line x1='260' y1='30' x2='40' y2='170' stroke='%23d97706' stroke-width='3'/><rect x='50' y='40' width='200' height='120' fill='none' stroke='%23f59e0b' stroke-width='1' stroke-dasharray='5,5'/><text x='150' y='110' font-family='sans-serif' font-size='14' font-weight='bold' fill='%23f59e0b' text-anchor='middle'>PETI KAYU RADIATOR</text></svg>",
                 history: [
-                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-17 11:30 WIT", desc: "Radiator eks-Warranty GS1007 (Lurang) dalam peti kayu (Box) telah dimuat di LCT P17 VOY 1215." },
+                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-17 11:30 WIT", desc: "Radiator eks-Warranty GS1007 (Lurang) dalam peti kayu telah dimuat di LCT P17 VOY 1215." },
                     { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-16 14:15 WIT", desc: "Pemeriksaan dokumen SIO & Surat Jalan No LOG-BKP/BTR-000 selesai disetujui." },
                     { status: "Draft & Packed", location: "Workshop Wetar Site", time: "2026-07-15 09:00 WIT", desc: "Radiator dikemas dengan Box dimensi 200x100x190 cm." }
                 ]
             }
         ];
 
-        // Menggunakan Key Baru 'wetar_shipments_clean_v8_kg' agar 100% bersih di browser user dari sisa "Ton" lama
-        let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_shipments_clean_v8_kg')) || [];
+        // MENGGUNAKAN KEY BARU V12_KG YANG 100% BERSIH DI BROWSER USER
+        let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_logistics_v12_kg')) || [];
 
         // Milestones Multi-Hub Logistik
         const STATUS_STEPS = [
             { title: "Draft & Packed", subtitle: "Gudang Wetar", icon: "📦" },
             { title: "Security Cleared", subtitle: "Port Wetar", icon: "🛡️" },
             { title: "Loaded onto Vessel", subtitle: "LCT ke Kupang", icon: "🏗️" },
-            { title: "Arrived Kupang HUB", subtitle: "Transit Kupang", icon: "⚓" },
-            { title: "Arrived SUB HUB", subtitle: "Sortir Surabaya", icon: "🏢" },
+            { title: "Arrived at Kupang HUB", subtitle: "Transit Kupang", icon: "⚓" },
+            { title: "Arrived at SUB HUB", subtitle: "Sortir Surabaya", icon: "🏢" },
             { title: "Delivered & Received", subtitle: "Tujuan Akhir", icon: "🎯" }
         ];
 
         // Global State variables
         let selectedId = SHIPMENTS.length > 0 ? SHIPMENTS[0].id : null;
         let currentTab = "all"; // 'all', 'active', 'delivered'
+        let currentMainScreen = "dashboard"; // 'dashboard' or 'excel'
         let searchQuery = "";
-        let deleteConfirmActive = false; // State konfirmasi hapus kustom
-        let tempPhotoBase64 = ""; // Menampung hasil unggah file base64 sementara
+        let deleteConfirmActive = false;
+        let tempPhotoBase64 = "";
 
-        // Simpan data terkini ke LocalStorage dengan key baru yang aman
+        // Simpan data terkini ke LocalStorage
         function saveToLocalStorage() {
-            localStorage.setItem('wetar_shipments_clean_v8_kg', JSON.stringify(SHIPMENTS));
+            localStorage.setItem('wetar_logistics_v12_kg', JSON.stringify(SHIPMENTS));
         }
 
-        // UI RENDERING ENGINES
+        // SCREEN SWITCHER CONTROLLER (DASHBOARD VS EXCEL VIEW)
+        function switchMainScreen(screen) {
+            currentMainScreen = screen;
+            const btnDash = document.getElementById('btnScreenDashboard');
+            const btnEx = document.getElementById('btnScreenExcel');
+            const areaDash = document.getElementById('screenDashboardArea');
+            const areaEx = document.getElementById('screenExcelArea');
+
+            if (screen === 'dashboard') {
+                btnDash.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-amber-500 text-slate-950";
+                btnEx.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-slate-100 flex items-center gap-1";
+                areaDash.classList.remove('hidden');
+                areaEx.classList.add('hidden');
+            } else {
+                btnEx.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all bg-amber-500 text-slate-950 flex items-center gap-1";
+                btnDash.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-slate-100";
+                areaDash.classList.add('hidden');
+                areaEx.classList.remove('hidden');
+                renderExcelScreen(); // Render content excel
+            }
+        }
+
+        // RENDERING UTAMA
         function initApp() {
             renderList();
             renderDetail();
@@ -932,18 +1127,12 @@
 
         function setupEventListeners() {
             // Search Input Listeners
-            document.getElementById('desktopSearchInput').addEventListener('input', (e) => {
+            document.getElementById('searchBarGlobal').addEventListener('input', (e) => {
                 searchQuery = e.target.value;
-                document.getElementById('mobileSearchInput').value = searchQuery; // Sync
-                renderList();
-            });
-            document.getElementById('mobileSearchInput').addEventListener('input', (e) => {
-                searchQuery = e.target.value;
-                document.getElementById('desktopSearchInput').value = searchQuery; // Sync
                 renderList();
             });
 
-            // File Upload Listener & Auto Compressor (Agar hemat memori LocalStorage)
+            // File Upload Listener & Auto Compressor
             document.getElementById('newPhoto').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -952,7 +1141,7 @@
                         const img = new Image();
                         img.onload = function() {
                             const canvas = document.createElement('canvas');
-                            const MAX_WIDTH = 400; // Dikompres ke lebar maks 400px
+                            const MAX_WIDTH = 400;
                             const MAX_HEIGHT = 400;
                             let width = img.width;
                             let height = img.height;
@@ -972,7 +1161,7 @@
                             canvas.height = height;
                             const ctx = canvas.getContext('2d');
                             ctx.drawImage(img, 0, 0, width, height);
-                            tempPhotoBase64 = canvas.toDataURL('image/jpeg', 0.65); // Kompresi kualitas jpeg ke 65%
+                            tempPhotoBase64 = canvas.toDataURL('image/jpeg', 0.65);
                         };
                         img.src = event.target.result;
                     };
@@ -994,7 +1183,6 @@
             document.getElementById('metricDelivered').innerText = delivered;
             document.getElementById('metricWeight').innerText = totalWeight.toLocaleString('id-ID') + " KG";
 
-            // Update Progress Bar animations
             const activePercent = total > 0 ? (active / total) * 100 : 0;
             const deliveredPercent = total > 0 ? (delivered / total) * 100 : 0;
             
@@ -1004,7 +1192,6 @@
 
         function switchTab(tab) {
             currentTab = tab;
-            // Update Tab UI Classnames
             ['all', 'active', 'delivered'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (t === tab) {
@@ -1044,18 +1231,21 @@
                         <span class="text-3xl">📦</span>
                         <p>Belum ada kargo terdaftar.</p>
                         <button onclick="loadMockData()" class="text-[10px] text-amber-500 font-semibold hover:underline">
-                            Muat Data Simulasi (Untuk Demo)
+                            Muat Data Radiator BTR-516 (Contoh Berkas)
                         </button>
                     </div>
                 `;
                 selectedId = null;
+                document.getElementById('btnScreenExcelNotif').innerText = "Empty";
+                renderDetail();
                 return;
             }
 
-            // Jika item terpilih saat ini hilang dari daftar filter, pilih item pertama dari hasil filter
             if (!selectedId || !filtered.some(s => s.id === selectedId)) {
                 selectedId = filtered[0].id;
             }
+
+            document.getElementById('btnScreenExcelNotif').innerText = selectedId.split('-').pop();
 
             filtered.forEach(ship => {
                 const isSelected = ship.id === selectedId;
@@ -1103,16 +1293,19 @@
 
         function selectShipment(id) {
             selectedId = id;
-            resetDeleteButton(); // Reset tombol konfirmasi jika ganti pilihan
+            resetDeleteButton();
+            document.getElementById('btnScreenExcelNotif').innerText = selectedId.split('-').pop();
             renderList();
             renderDetail();
+            if (currentMainScreen === 'excel') {
+                renderExcelScreen();
+            }
         }
 
-        // DETAIL VIEWER ENGINE
+        // RENDER DETAIL UTAMA DI SCREEN DASHBOARD
         function renderDetail() {
             const ship = SHIPMENTS.find(s => s.id === selectedId);
             
-            // Jika tidak ada barang yang tersisa di daftar
             if (!ship) {
                 document.getElementById('detailTrackingId').innerText = `TRACKING NO: -`;
                 document.getElementById('detailContainerId').innerText = `CONTAINER: -`;
@@ -1125,20 +1318,17 @@
                 document.getElementById('detailCarrier').innerText = "-";
                 document.getElementById('detailDestination').innerText = "-";
                 document.getElementById('detailLastUpdated').innerText = "-";
-                document.getElementById('detailDeliveryAddress').innerText = "Silakan tambah outbound baru di tombol kanan atas.";
+                document.getElementById('detailDeliveryAddress').innerText = "Silakan klik Outbound Baru di kanan atas.";
                 document.getElementById('verticalTimeline').innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Tidak ada riwayat.</div>';
                 document.getElementById('horizontalMilestones').innerHTML = '';
                 document.getElementById('btnAdvance').style.display = 'none';
                 document.getElementById('btnDeleteShipment').style.display = 'none';
-                document.getElementById('btnPrintForm').style.display = 'none';
                 document.getElementById('detailPhotoContainer').innerHTML = `<p class="text-slate-600 text-[10px] text-center p-4">Tidak ada gambar</p>`;
                 return;
             }
 
             document.getElementById('btnDeleteShipment').style.display = 'flex';
-            document.getElementById('btnPrintForm').style.display = 'flex';
 
-            // Main Info Binding
             document.getElementById('detailTrackingId').innerText = `TRACKING NO: ${ship.id}`;
             document.getElementById('detailContainerId').innerText = `CONTAINER: ${ship.containerId}`;
             document.getElementById('detailItemName').innerText = ship.itemName;
@@ -1146,17 +1336,13 @@
             document.getElementById('detailQty').innerText = `${ship.qty} ${ship.unit}`;
             document.getElementById('detailWeight').innerText = `(${ship.weight.toLocaleString('id-ID')} KG)`;
 
-            // Metadata Grid Binding
             document.getElementById('detailCategory').innerText = ship.category;
             document.getElementById('detailDepartment').innerText = ship.department || "Maintenance Workshop";
             document.getElementById('detailCarrier').innerText = ship.carrier;
             document.getElementById('detailDestination').innerText = ship.destination;
             document.getElementById('detailLastUpdated').innerText = ship.lastUpdated;
+            document.getElementById('detailDeliveryAddress').innerText = ship.deliveryAddress || "-";
 
-            // Custom Delivery Address Binding
-            document.getElementById('detailDeliveryAddress').innerText = ship.deliveryAddress || "Alamat Penerima belum diisikan.";
-
-            // RENDER FOTO FISIK KARGO
             const photoContainer = document.getElementById('detailPhotoContainer');
             if (ship.photo) {
                 photoContainer.innerHTML = `<img src="${ship.photo}" alt="Foto Kargo" class="max-w-full max-h-[140px] object-contain rounded-lg shadow-sm">`;
@@ -1171,42 +1357,40 @@
                 `;
             }
 
-            // SHORT DESTINATION FOR MAP LABEL
             const destWords = ship.destination.split(' ');
-            const shortDest = destWords[0]; // Ambil nama utamanya
+            const shortDest = destWords[0];
             document.getElementById('mapDestinationLabel').innerText = shortDest;
 
-            // MAP ROUTE SIMULATION ENGINE (WETAR -> KUPANG -> SUB -> TUJUAN)
-            let percentProgress = 6; // Posisi Wetar
+            // MAP ROUTE ANIMATION SCRIPT
+            let percentProgress = 6;
             let lineKupangWidth = 0;
             let lineSurabayaWidth = 0;
             let lineTujuanWidth = 0;
 
             const step = ship.currentStatusIndex;
 
-            // Reset warna node map
             document.getElementById('nodeWetar').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-amber-500 flex items-center justify-center text-sm shadow-lg";
             document.getElementById('nodeKupang').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg";
             document.getElementById('nodeSurabaya').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg";
             document.getElementById('nodeTujuan').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-slate-700 flex items-center justify-center text-sm shadow-lg";
 
             if (step === 0 || step === 1) {
-                percentProgress = 6; // Wetar Site
+                percentProgress = 6;
             } else if (step === 2) {
-                percentProgress = 23; // Di laut LCT Wetar -> Kupang
+                percentProgress = 23;
                 lineKupangWidth = 50;
             } else if (step === 3) {
-                percentProgress = 39; // Kupang HUB
+                percentProgress = 39;
                 lineKupangWidth = 100;
                 document.getElementById('nodeKupang').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-amber-500 flex items-center justify-center text-sm shadow-lg shadow-amber-500/10";
             } else if (step === 4) {
-                percentProgress = 71; // Surabaya HUB
+                percentProgress = 71;
                 lineKupangWidth = 100;
                 lineSurabayaWidth = 100;
                 document.getElementById('nodeKupang').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-amber-400 flex items-center justify-center text-sm shadow-lg";
                 document.getElementById('nodeSurabaya').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-amber-500 flex items-center justify-center text-sm shadow-lg shadow-amber-500/10";
             } else if (step === 5) {
-                percentProgress = 92; // Sampai Tujuan Akhir
+                percentProgress = 92;
                 lineKupangWidth = 100;
                 lineSurabayaWidth = 100;
                 lineTujuanWidth = 100;
@@ -1215,13 +1399,11 @@
                 document.getElementById('nodeTujuan').className = "w-8 h-8 rounded-full bg-slate-950 border-2 border-emerald-500 flex items-center justify-center text-sm shadow-lg shadow-emerald-500/10";
             }
 
-            // Jalankan animasi transisi garis & kapal
             document.getElementById('lineKupang').style.width = `${lineKupangWidth}%`;
             document.getElementById('lineSurabaya').style.width = `${lineSurabayaWidth}%`;
             document.getElementById('lineTujuan').style.width = `${lineTujuanWidth}%`;
             document.getElementById('mapVesselContainer').style.left = `${percentProgress}%`;
 
-            // Route Destination Header Text
             document.getElementById('ruteIndicator').innerText = `Wetar Site ➔ Kupang HUB ➔ SUB HUB ➔ ${ship.destination}`;
 
             // HORIZONTAL MILESTONE BUILDER
@@ -1305,7 +1487,6 @@
                 timelineContainer.appendChild(item);
             });
 
-            // Adjust form input suggestions
             if (ship.currentStatusIndex < 5) {
                 const nextStep = STATUS_STEPS[ship.currentStatusIndex + 1];
                 document.getElementById('statusInput').value = nextStep.title;
@@ -1318,52 +1499,131 @@
                 document.getElementById('descInput').value = '';
                 document.getElementById('btnAdvance').style.display = 'none';
             }
+
+            // Sync static print area data dynamically
+            syncPrintArea(ship);
         }
 
-        // FITUR HAPUS MANIFEST DENGAN KONFIRMASI INTERAKTIF AMAN
-        function confirmDelete() {
-            const btn = document.getElementById('btnDeleteShipment');
-            const label = document.getElementById('deleteBtnText');
+        // RENDER DAN SYNC LAYAR FORM EXCEL DI SCREEN TAB 2
+        function renderExcelScreen() {
+            const ship = SHIPMENTS.find(s => s.id === selectedId);
+            if (!ship) return;
 
-            if (!deleteConfirmActive) {
-                // Tahap 1: Ubah tampilan tombol untuk meminta konfirmasi klik sekali lagi
-                deleteConfirmActive = true;
-                btn.className = "text-[10px] font-bold text-white border border-red-500 bg-red-600 hover:bg-red-700 px-2.5 py-1 rounded transition-all flex items-center gap-1 active:scale-95 animate-pulse";
-                label.innerText = "Yakin Hapus? Klik Lagi";
+            document.getElementById('excelPrintDate').innerText = ship.lastUpdated.split(' ')[0];
+            document.getElementById('excelPrintRef').innerText = `LOG-BKP/BTR-${ship.id.split('-').pop()}`;
+            document.getElementById('excelContainerHighlight').innerText = ship.containerId;
+            document.getElementById('excelTrackingHighlight').innerText = ship.id;
+
+            // Isi baris tabel
+            document.getElementById('excelUser').innerText = ship.originator || "Bayu Aji Sena";
+            document.getElementById('excelTrackId').innerText = ship.id;
+            document.getElementById('excelCost').innerText = ship.sku;
+            document.getElementById('excelQtyItem').innerText = ship.qty;
+            document.getElementById('excelItemDesc').innerText = ship.itemName;
+            document.getElementById('excelQtyPckg').innerText = ship.qty;
+            document.getElementById('excelUOM').innerText = ship.unit;
+            document.getElementById('excelLen').innerText = ship.length || "200";
+            document.getElementById('excelWid').innerText = ship.width || "100";
+            document.getElementById('excelHei').innerText = ship.height || "190";
+
+            const volume = Number(ship.length || 200) * Number(ship.width || 100) * Number(ship.height || 190);
+            document.getElementById('excelVol').innerText = volume.toLocaleString('id-ID');
+            document.getElementById('excelWt').innerText = ship.weight.toLocaleString('id-ID');
+
+            // Baris total
+            document.getElementById('excelTotalPkg').innerText = ship.qty;
+            document.getElementById('excelTotalVol').innerText = volume.toLocaleString('id-ID');
+            document.getElementById('excelTotalWt').innerText = ship.weight.toLocaleString('id-ID');
+
+            // Embed Foto
+            const photoFrame = document.getElementById('excelPhotoFrame');
+            if (ship.photo) {
+                photoFrame.innerHTML = `<img src="${ship.photo}" alt="Foto Kargo" class="max-w-full max-h-28 object-contain">`;
             } else {
-                // Tahap 2: Eksekusi penghapusan kargo dari list
-                executeDeleteShipment();
+                photoFrame.innerHTML = `<span class="text-gray-400 italic">Tidak ada foto</span>`;
             }
+
+            document.getElementById('excelAddressCell').innerText = ship.deliveryAddress || "-";
+            document.getElementById('excelPhoneCell').innerText = ship.phone || "-";
+            document.getElementById('excelRemarksCell').innerText = ship.remarks || "-";
+
+            document.getElementById('excelSignUserName').innerText = ship.originator || "Bayu Aji Sena";
+            document.getElementById('excelSignUserDept').innerText = ship.department || "Maintenance";
+            document.getElementById('excelSignMgrName').innerText = ship.approver || "Wasiman W";
+            document.getElementById('excelSignMgrDept').innerText = "Maintenance Manager";
+
+            // Atur checkbox checklist
+            document.getElementById('exCheckRepair').checked = false;
+            document.getElementById('exCheckCalibration').checked = false;
+            document.getElementById('exCheckReturn').checked = false;
+            document.getElementById('exCheckScrap').checked = false;
+            document.getElementById('exCheckOther').checked = false;
+
+            const reason = ship.reason || "REPAIR";
+            if (reason === "REPAIR") document.getElementById('exCheckRepair').checked = true;
+            else if (reason === "CALIBRATION") document.getElementById('exCheckCalibration').checked = true;
+            else if (reason === "RETURN") document.getElementById('exCheckReturn').checked = true;
+            else if (reason === "SCRAP") document.getElementById('exCheckScrap').checked = true;
+            else document.getElementById('exCheckOther').checked = true;
         }
 
-        function resetDeleteButton() {
-            deleteConfirmActive = false;
-            const btn = document.getElementById('btnDeleteShipment');
-            if (btn) {
-                btn.className = "text-[10px] font-bold text-red-400 border border-red-500/20 bg-red-500/10 hover:bg-red-500 hover:text-white px-2.5 py-1 rounded transition-all flex items-center gap-1 active:scale-95";
-                const label = document.getElementById('deleteBtnText');
-                if (label) label.innerText = "Hapus Manifest";
-            }
-        }
+        // SYNC PRINT AREA (UNTUK KEBUTUHAN PRINT SYSTEM DI BELAKANG LAYAR)
+        function syncPrintArea(ship) {
+            document.getElementById('printDateStr').innerText = ship.lastUpdated.split(' ')[0];
+            document.getElementById('printRegisterNum').innerText = `LOG-BKP/BTR-${ship.id.split('-').pop()}`;
+            document.getElementById('printContainerSorotan').innerText = ship.containerId;
+            document.getElementById('printTrackingSorotan').innerText = ship.id;
 
-        function executeDeleteShipment() {
-            SHIPMENTS = SHIPMENTS.filter(s => s.id !== selectedId);
-            saveToLocalStorage();
+            document.getElementById('printUser').innerText = ship.originator || "Bayu Aji Sena";
+            document.getElementById('printTrack').innerText = ship.id;
+            document.getElementById('printCostCode').innerText = ship.sku;
+            document.getElementById('printQtyItem').innerText = ship.qty;
+            document.getElementById('printDescItem').innerText = ship.itemName;
+            document.getElementById('printQtyPckg').innerText = ship.qty;
+            document.getElementById('printTypePackage').innerText = ship.unit;
+            document.getElementById('printLen').innerText = ship.length || "200";
+            document.getElementById('printWid').innerText = ship.width || "100";
+            document.getElementById('printHei').innerText = ship.height || "190";
 
-            // Atur kargo default berikutnya
-            if (SHIPMENTS.length > 0) {
-                selectedId = SHIPMENTS[0].id;
+            const volume = Number(ship.length || 200) * Number(ship.width || 100) * Number(ship.height || 190);
+            document.getElementById('printVolumeTotal').innerText = volume.toLocaleString('id-ID');
+            document.getElementById('printWeightTotal').innerText = ship.weight.toLocaleString('id-ID');
+
+            document.getElementById('printTotalPackageSum').innerText = ship.qty;
+            document.getElementById('printVolumeSum').innerText = volume.toLocaleString('id-ID');
+            document.getElementById('printWeightSum').innerText = ship.weight.toLocaleString('id-ID');
+
+            const photoCell = document.getElementById('printPhotoCell');
+            if (ship.photo) {
+                photoCell.innerHTML = `<img src="${ship.photo}" alt="Foto Kargo" class="max-w-full max-h-32 object-contain">`;
             } else {
-                selectedId = null;
+                photoCell.innerHTML = `<span class="text-gray-400 italic">Tidak ada foto</span>`;
             }
 
-            resetDeleteButton();
-            renderList();
-            renderDetail();
-            renderMetrics();
+            document.getElementById('printAddressCell').innerText = ship.deliveryAddress || "-";
+            document.getElementById('printPhoneCell').innerText = ship.phone || "-";
+            document.getElementById('printRemarksCell').innerText = ship.remarks || "-";
+
+            document.getElementById('signOriginatorName').innerText = ship.originator || "Bayu Aji Sena";
+            document.getElementById('signOriginatorDept').innerText = ship.department || "Maintenance";
+            document.getElementById('signManagerName').innerText = ship.approver || "Wasiman W";
+            document.getElementById('signManagerDept').innerText = "Maintenance";
+
+            document.getElementById('checkRepair').checked = false;
+            document.getElementById('checkCalibration').checked = false;
+            document.getElementById('checkReturn').checked = false;
+            document.getElementById('checkScrap').checked = false;
+            document.getElementById('checkOther').checked = false;
+
+            const reason = ship.reason || "REPAIR";
+            if (reason === "REPAIR") document.getElementById('checkRepair').checked = true;
+            else if (reason === "CALIBRATION") document.getElementById('checkCalibration').checked = true;
+            else if (reason === "RETURN") document.getElementById('checkReturn').checked = true;
+            else if (reason === "SCRAP") document.getElementById('checkScrap').checked = true;
+            else document.getElementById('checkOther').checked = true;
         }
 
-        // STATE UPDATE CONTROLLER FUNCTIONS
+        // CONTROL MANIPULASI STATUS
         function setStepStatus(stepIndex) {
             SHIPMENTS = SHIPMENTS.map(ship => {
                 if (ship.id === selectedId) {
@@ -1373,7 +1633,7 @@
                     
                     let targetLocation = step.subtitle;
                     if (stepIndex === 5) {
-                        targetLocation = ship.destination; // Langsung sebut nama site
+                        targetLocation = ship.destination;
                     }
 
                     const newLog = {
@@ -1399,6 +1659,9 @@
             renderList();
             renderDetail();
             renderMetrics();
+            if (currentMainScreen === 'excel') {
+                renderExcelScreen();
+            }
         }
 
         function advanceStatus() {
@@ -1440,7 +1703,6 @@
                 return ship;
             });
 
-            // Reset form
             document.getElementById('statusInput').value = '';
             document.getElementById('locationInput').value = '';
             document.getElementById('descInput').value = '';
@@ -1449,86 +1711,100 @@
             renderList();
             renderDetail();
             renderMetrics();
+            if (currentMainScreen === 'excel') {
+                renderExcelScreen();
+            }
         }
 
-        // PRINT ENGINE FOR OUTBOUND EXCEL MATERIAL REQUEST
-        function printOutboundForm() {
-            const ship = SHIPMENTS.find(s => s.id === selectedId);
-            if (!ship) return;
+        // DELETING LOGIC
+        function confirmDelete() {
+            const btn = document.getElementById('btnDeleteShipment');
+            const label = document.getElementById('deleteBtnText');
 
-            // Isi metadata header
-            document.getElementById('printDateStr').innerText = ship.lastUpdated.split(' ')[0];
-            document.getElementById('printRegisterNum').innerText = `LOG-BKP/BTR-${ship.id.split('-').pop()}`;
-
-            // Isi tag sorotan kuning & hijau
-            document.getElementById('printContainerSorotan').innerText = ship.containerId;
-            document.getElementById('printTrackingSorotan').innerText = ship.id;
-
-            // Isi kolom baris data
-            document.getElementById('printUser').innerText = ship.originator || "Bayu Aji Sena";
-            document.getElementById('printTrack').innerText = ship.id;
-            document.getElementById('printCostCode').innerText = ship.sku;
-            document.getElementById('printQtyItem').innerText = ship.qty;
-            document.getElementById('printDescItem').innerText = ship.itemName;
-            document.getElementById('printQtyPckg').innerText = ship.qty;
-            document.getElementById('printTypePackage').innerText = ship.unit;
-            document.getElementById('printLen').innerText = ship.length || "200";
-            document.getElementById('printWid').innerText = ship.width || "100";
-            document.getElementById('printHei').innerText = ship.height || "190";
-
-            // Hitung volume otomatis L x W x H
-            const volume = Number(ship.length || 200) * Number(ship.width || 100) * Number(ship.height || 190);
-            document.getElementById('printVolumeTotal').innerText = volume.toLocaleString('id-ID');
-            document.getElementById('printWeightTotal').innerText = ship.weight.toLocaleString('id-ID');
-
-            // Baris total sum
-            document.getElementById('printTotalPackageSum').innerText = ship.qty;
-            document.getElementById('printVolumeSum').innerText = volume.toLocaleString('id-ID');
-            document.getElementById('printWeightSum').innerText = ship.weight.toLocaleString('id-ID');
-
-            // Embed Foto Fisik
-            const photoCell = document.getElementById('printPhotoCell');
-            if (ship.photo) {
-                photoCell.innerHTML = `<img src="${ship.photo}" alt="Foto Outbound" class="max-w-full max-h-32 object-contain">`;
+            if (!deleteConfirmActive) {
+                deleteConfirmActive = true;
+                btn.className = "text-[10px] font-bold text-white border border-red-500 bg-red-600 hover:bg-red-700 px-2.5 py-1.5 rounded transition-all flex items-center gap-1 active:scale-95 animate-pulse";
+                label.innerText = "Yakin Hapus? Klik Lagi";
             } else {
-                photoCell.innerHTML = `<span class="text-gray-400 italic">Tidak ada foto dilampirkan</span>`;
+                executeDeleteShipment();
+            }
+        }
+
+        function resetDeleteButton() {
+            deleteConfirmActive = false;
+            const btn = document.getElementById('btnDeleteShipment');
+            if (btn) {
+                btn.className = "text-[10px] font-bold text-red-400 border border-red-500/20 bg-red-500/10 hover:bg-red-500 hover:text-white px-2.5 py-1.5 rounded transition-all flex items-center gap-1 active:scale-95";
+                const label = document.getElementById('deleteBtnText');
+                if (label) label.innerText = "Hapus Manifest";
+            }
+        }
+
+        function executeDeleteShipment() {
+            SHIPMENTS = SHIPMENTS.filter(s => s.id !== selectedId);
+            saveToLocalStorage();
+
+            if (SHIPMENTS.length > 0) {
+                selectedId = SHIPMENTS[0].id;
+            } else {
+                selectedId = null;
             }
 
-            // Alamat & Remarks
-            document.getElementById('printAddressCell').innerText = ship.deliveryAddress || "-";
-            document.getElementById('printPhoneCell').innerText = ship.phone || "Nashrul Alfan";
-            document.getElementById('printRemarksCell').innerText = ship.remarks || "-";
+            resetDeleteButton();
+            renderList();
+            renderDetail();
+            renderMetrics();
+            if (currentMainScreen === 'excel') {
+                renderExcelScreen();
+            }
+        }
 
-            // Tanda Tangan
-            document.getElementById('signOriginatorName').innerText = ship.originator || "Bayu Aji Sena";
-            document.getElementById('signOriginatorDept').innerText = ship.department || "Maintenance Workshop";
-            document.getElementById('signManagerName').innerText = ship.approver || "Wasiman W";
+        // EXCEL DOWNLOAD EXPORTER
+        function exportToCSV() {
+            if (SHIPMENTS.length === 0) {
+                return;
+            }
 
-            // Atur Checklist Alasan Outbound
-            document.getElementById('checkRepair').checked = false;
-            document.getElementById('checkCalibration').checked = false;
-            document.getElementById('checkReturn').checked = false;
-            document.getElementById('checkScrap').checked = false;
-            document.getElementById('checkOther').checked = false;
-
-            const reason = ship.reason || "REPAIR";
-            if (reason === "REPAIR") document.getElementById('checkRepair').checked = true;
-            else if (reason === "CALIBRATION") document.getElementById('checkCalibration').checked = true;
-            else if (reason === "RETURN") document.getElementById('checkReturn').checked = true;
-            else if (reason === "SCRAP") document.getElementById('checkScrap').checked = true;
-            else document.getElementById('checkOther').checked = true;
-
-            // Munculkan layar print area & sembunyikan yang lain secara responsif
-            window.print();
+            let csvContent = "\uFEFF"; 
+            const headers = [
+                "ID Outbound", "No Kontainer", "Originator", "SKU / Cost Center", "Deskripsi Barang", 
+                "Kategori", "Departemen", "Qty", "Satuan", "Berat (KG)", "Panjang (CM)", 
+                "Lebar (CM)", "Tinggi (CM)", "Carrier (Kapal)", "Pelabuhan Asal", "Tujuan Utama", 
+                "Detail Alamat Penerima", "Status Terakhir", "Update Terakhir"
+            ];
+            
+            csvContent += headers.join(",") + "\r\n";
+            
+            SHIPMENTS.forEach(ship => {
+                const currentStatus = STATUS_STEPS[ship.currentStatusIndex].title;
+                const row = [
+                    ship.id, ship.containerId, `"${ship.originator || 'Bayu Aji Sena'}"`, ship.sku,
+                    `"${ship.itemName.replace(/"/g, '""')}"`, `"${ship.category}"`, 
+                    `"${ship.department || 'Maintenance Workshop'}"`, ship.qty, ship.unit, ship.weight,
+                    ship.length || 200, ship.width || 100, ship.height || 190, `"${ship.carrier}"`,
+                    `"${ship.origin}"`, `"${ship.destination}"`, `"${(ship.deliveryAddress || '').replace(/"/g, '""')}"`,
+                    `"${currentStatus}"`, `"${ship.lastUpdated}"`
+                ];
+                csvContent += row.join(",") + "\r\n";
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Manifes_Outbound_Wetar_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // MODAL MANAGEMENT
         function openAddModal() {
-            // Pre-fill next logical ID
             document.getElementById('newId').value = `BTR-MOB-PLT-SWI-${Math.floor(100 + Math.random() * 900)}`;
             document.getElementById('newContainerId').value = `TAKU${Math.floor(2000000 + Math.random() * 900000)}`;
-            tempPhotoBase64 = ""; // Reset tampungan gambar sementara
-            document.getElementById('newPhoto').value = ""; // Reset input file
+            tempPhotoBase64 = "";
+            document.getElementById('newPhoto').value = "";
             document.getElementById('addModal').classList.remove('hidden');
         }
 
@@ -1539,7 +1815,7 @@
         function handleNewShipment(e) {
             e.preventDefault();
             const newId = document.getElementById('newId').value || `BTR-MOB-PLT-SWI-${Math.floor(100 + Math.random() * 900)}`;
-            const newContainerId = document.getElementById('newContainerId').value || `TAKU${Math.floor(2000000 + Math.random() * 900000)}`;
+            const newContainerId = document.getElementById('newContainerId').value;
             
             const now = new Date();
             const dateStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} WIT`;
@@ -1566,7 +1842,7 @@
                 origin: document.getElementById('newOrigin').value,
                 destination: document.getElementById('newDestination').value,
                 deliveryAddress: document.getElementById('newDeliveryAddress').value,
-                photo: tempPhotoBase64, // Memasukkan foto kustom yang telah dikompres
+                photo: tempPhotoBase64,
                 currentStatusIndex: 0,
                 lastUpdated: dateStr,
                 history: [
@@ -1585,90 +1861,20 @@
             saveToLocalStorage();
             closeAddModal();
             initApp();
+            
+            // Switch view automatically to let them see the created Excel sheet
+            switchMainScreen('excel');
         }
 
-        // LOAD DEMO SIMULATION DATA
+        // LOAD DEMO DATA
         function loadMockData() {
             SHIPMENTS = [...DEFAULT_SHIPMENTS];
             selectedId = SHIPMENTS[0].id;
             saveToLocalStorage();
             initApp();
+            switchMainScreen('dashboard');
         }
 
-        // FEATURE: DOWNLOAD EXCEL (CSV FORMAT)
-        function exportToCSV() {
-            if (SHIPMENTS.length === 0) {
-                return;
-            }
-
-            // Add UTF-8 BOM so Indonesian Excel opens characters properly
-            let csvContent = "\uFEFF"; 
-            
-            // CSV Headers
-            const headers = [
-                "ID Outbound", 
-                "No Kontainer", 
-                "Originator",
-                "SKU / Cost Center", 
-                "Deskripsi Barang", 
-                "Kategori", 
-                "Departemen", 
-                "Qty", 
-                "Satuan", 
-                "Berat (KG)", 
-                "Panjang (CM)",
-                "Lebar (CM)",
-                "Tinggi (CM)",
-                "Carrier (Kapal)", 
-                "Pelabuhan Asal", 
-                "Tujuan Utama", 
-                "Detail Alamat Penerima (Deliver To)",
-                "Status Terakhir", 
-                "Update Terakhir"
-            ];
-            
-            csvContent += headers.join(",") + "\r\n";
-            
-            // Loop through all data in the client-state list
-            SHIPMENTS.forEach(ship => {
-                const currentStatus = STATUS_STEPS[ship.currentStatusIndex].title;
-                const row = [
-                    ship.id,
-                    ship.containerId,
-                    `"${ship.originator || 'Bayu Aji Sena'}"`,
-                    ship.sku,
-                    `"${ship.itemName.replace(/"/g, '""')}"`,
-                    `"${ship.category}"`,
-                    `"${ship.department || 'Maintenance Workshop'}"`,
-                    ship.qty,
-                    ship.unit,
-                    ship.weight,
-                    ship.length || 200,
-                    ship.width || 100,
-                    ship.height || 190,
-                    `"${ship.carrier}"`,
-                    `"${ship.origin}"`,
-                    `"${ship.destination}"`,
-                    `"${(ship.deliveryAddress || '').replace(/"/g, '""')}"`,
-                    `"${currentStatus}"`,
-                    `"${ship.lastUpdated}"`
-                ];
-                csvContent += row.join(",") + "\r\n";
-            });
-            
-            // Trigger browser download link
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Manifes_Outbound_Wetar_${new Date().toISOString().slice(0,10)}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // Run application on load
         window.onload = function () {
             initApp();
         }
