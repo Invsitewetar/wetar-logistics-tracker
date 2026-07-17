@@ -72,7 +72,6 @@
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased pb-12">
 
-    <!-- HEADER NAVIGASI UTAMA -->
     <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
             <div class="flex items-center space-x-3">
@@ -136,7 +135,7 @@
             <input
                 type="text"
                 id="searchBarGlobal"
-                placeholder="Cari ID, No Kontainer, atau Nama Barang..."
+                placeholder="Cari ID, No Kontainer, Departemen, atau Nama Barang..."
                 class="w-full bg-slate-900 text-slate-100 rounded-lg pl-10 pr-4 py-2.5 border border-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all text-sm"
             />
             <div class="absolute left-3 top-3 text-slate-500">
@@ -193,6 +192,36 @@
                     <div class="h-full bg-sky-500" style="width: 100%"></div>
                 </div>
             </div>
+        </div>
+
+        <!-- FITUR BARU: GLOBAL FLEET TRACKER MAP & COMMAND CENTER -->
+        <div id="fleetCommandSection" class="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-xl mb-6 no-print space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                    </span>
+                    <div>
+                        <h2 class="font-extrabold text-sm md:text-base text-slate-200 tracking-wide">
+                            PETA MONITORING ALUR KONTAINER GLOBAL
+                        </h2>
+                        <p class="text-[10px] md:text-xs text-slate-400">Distribusi real-time lokasi semua kontainer aktif berdasarkan tahap logistik maritim.</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-md border border-amber-500/20 uppercase tracking-wider">
+                    Interactive Live Fleet
+                </span>
+            </div>
+
+            <!-- Alur Grid Multi-Hub untuk Semua Kontainer -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 pt-2" id="globalFleetGrid">
+                <!-- Setiap kolom mewakili status index 0-5. Di-render dinamis oleh javascript -->
+            </div>
+            
+            <p class="text-[9px] text-slate-500 text-center italic mt-1">
+                *Klik pada nomor kontainer/nama barang di atas untuk memilih dan mengarahkan detail panel di bawah secara cepat.
+            </p>
         </div>
 
         <!-- GRID UTAMA: DAFTAR BARANG & PELACAK DETAIL -->
@@ -337,7 +366,7 @@
                                 <div class="flex items-center justify-between mb-3">
                                     <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                                         <span class="animate-pulse flex h-2 w-2 rounded-full bg-amber-500"></span>
-                                        Rute Logistik Maritim (Multi-Hub)
+                                        Rute Logistik Maritim Kontainer Terpilih (Multi-Hub)
                                     </h3>
                                 </div>
 
@@ -421,7 +450,7 @@
                                     <svg class="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
                                     Progres Tahap Logistik
                                 </h3>
-                                <span class="text-[10px] text-amber-500 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Milestones</span>
+                                <span class="text-[10px] text-amber-500 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Ubah Tahap Manual</span>
                             </div>
 
                             <!-- Horizontal Trackers -->
@@ -1017,22 +1046,14 @@
 
     <!-- JAVASCRIPT STATE ENGINE & CACHE CONTROLLER -->
     <script>
-        // MEMBERSIHKAN SECARA PAKSA CACHE-CACHE LAMA AGAR TIDAK TERJADI BENTROK "TON"
-        if (localStorage.getItem('wetar_shipments_clean_v8_kg')) {
-            localStorage.removeItem('wetar_shipments_clean_v8_kg');
-        }
-        if (localStorage.getItem('wetar_shipments')) {
-            localStorage.removeItem('wetar_shipments');
-        }
-
-        // Data bawaan berkualitas tinggi bermotif persis berkas asli BTR-516
+        // Data bawaan berkualitas tinggi bermotif persis berkas asli BTR-516 dan kasus logistik riil lainnya
         const DEFAULT_SHIPMENTS = [
             {
                 id: "BTR-MOB-PLT-SWI-516",
                 containerId: "TAKU2315722",
                 originator: "Bayu Aji Sena",
                 sku: "BTRWWEMEE6-6784",
-                itemName: "RADIATOR",
+                itemName: "RADIATOR EXS-WARRANTY GS1007",
                 category: "Sparepart / Komponen",
                 department: "Maintenance Workshop",
                 qty: 1,
@@ -1057,11 +1078,75 @@
                     { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-16 14:15 WIT", desc: "Pemeriksaan dokumen SIO & Surat Jalan No LOG-BKP/BTR-000 selesai disetujui." },
                     { status: "Draft & Packed", location: "Workshop Wetar Site", time: "2026-07-15 09:00 WIT", desc: "Radiator dikemas dengan Box dimensi 200x100x190 cm." }
                 ]
+            },
+            {
+                id: "BTR-COP-IND-902",
+                containerId: "MSKU8829102",
+                originator: "Dani Setiawan",
+                sku: "BTR-COP-WTR-8812",
+                itemName: "TEMBAGA KATODA (COPPER CATHODE)",
+                category: "Produk Utama (Tembaga)",
+                department: "Mining Operations",
+                qty: 24,
+                unit: "Palet",
+                weight: 24500,
+                length: 600,
+                width: 240,
+                height: 250,
+                carrier: "KM MERATUS KALIMANTAN",
+                origin: "Wetar Island Site",
+                destination: "Konawe SCM",
+                reason: "OTHER",
+                remarks: "Pengiriman konsentrat tembaga katoda murni kualitas ekspor kelas industri",
+                approver: "Hendra Wijaya",
+                phone: "Irfan Logis",
+                deliveryAddress: "PT SULAWESI CAHAYA MINERAL, KONAWE INDUSTRIAL PARK, KONAWE UTARA, SULAWESI TENGGARA",
+                currentStatusIndex: 4, // Arrived at SUB HUB
+                lastUpdated: "2026-07-17 14:45 WIT",
+                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230f172a'/><rect x='30' y='50' width='240' height='110' fill='%23b45309' stroke='%23f59e0b' stroke-width='4'/><line x1='30' y1='105' x2='270' y2='105' stroke='%2378350f' stroke-width='2'/><text x='150' y='110' font-family='sans-serif' font-size='15' font-weight='black' fill='%23fef08a' text-anchor='middle'>PALLET TEMBAGA KATODA</text></svg>",
+                history: [
+                    { status: "Arrived at SUB HUB", location: "Depo Sortir Tanjung Perak Surabaya", time: "2026-07-17 14:45 WIT", desc: "Kontainer telah dibongkar dari kapal pengangkut utama KM Meratus dan sedang dalam proses kliring bea cukai domestik & sortir depo." },
+                    { status: "Arrived at Kupang HUB", location: "Tenau Port Kupang", time: "2026-07-15 10:00 WIT", desc: "Kapal LCT sandar di Kupang. Proses transit dan pemuatan ke kapal container liner (KM Meratus) berhasil." },
+                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-13 16:00 WIT", desc: "Pemuatan 24 Palet Tembaga Katoda ke lambung LCT sukses." },
+                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-12 11:30 WIT", desc: "Pemeriksaan dokumen kepabeanan dan berat rill selesai di jembatan timbang pelabuhan Wetar." },
+                    { status: "Draft & Packed", location: "Gudang Logistik Wetar", time: "2026-07-10 08:30 WIT", desc: "Produk tembaga diikat kawat baja pada palet dan disegel rapi." }
+                ]
+            },
+            {
+                id: "BTR-ENV-LMB-104",
+                containerId: "TAKU8810294",
+                originator: "Sandi Wijaya",
+                sku: "BTR-HSE-ENV-9012",
+                itemName: "LIMBAH ACCU BEKAS & B3",
+                category: "Limbah B3",
+                department: "HSE (Environment)",
+                qty: 12,
+                unit: "Drum",
+                weight: 4200,
+                length: 120,
+                width: 120,
+                height: 100,
+                carrier: "LCT BINA MARITIM 02",
+                origin: "Wetar Island Site",
+                destination: "BSI (Bumi Suksesindo)",
+                reason: "RETURN",
+                remarks: "Limbah B3 korosif accu bekas sisa alat berat Wetar untuk diolah pihak berizin resmi",
+                approver: "Guntur Pratama",
+                phone: "Pak Joko B3",
+                deliveryAddress: "PENGOLAH LIMBAH B3 PT PRASADHA PAMUNAH LIMBAH INDUSTRI (PPLI), CISARUA BOGOR UP. PT BUMI SUKSESINDO",
+                currentStatusIndex: 1, // Security Cleared
+                lastUpdated: "2026-07-17 08:00 WIT",
+                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230f172a'/><circle cx='150' cy='100' r='45' fill='%231e293b' stroke='%23ef4444' stroke-width='5'/><path d='M150,75 L150,110' stroke='%23ef4444' stroke-width='6' stroke-linecap='round'/><circle cx='150' cy='125' r='5' fill='%23ef4444'/><text x='150' y='170' font-family='sans-serif' font-size='12' font-weight='bold' fill='%23ef4444' text-anchor='middle'>HAZARDOUS WASTE B3</text></svg>",
+                history: [
+                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-17 08:00 WIT", desc: "Surat Izin Angkut Limbah B3 dari KLHK telah diverifikasi dan disegel oleh petugas keamanan pelabuhan." },
+                    { status: "Draft & Packed", location: "Temporary Storage Wetar HSE", time: "2026-07-16 13:00 WIT", desc: "Accu bekas dimasukkan ke dalam drum HDPE bersegel tahan asam." }
+                ]
             }
         ];
 
         // MENGGUNAKAN KEY PENYIMPANAN BARU V12 YANG BENAR-BENAR BERSIH DI BROWSER USER
-        let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_logistics_v12_kg')) || [];
+        // Jika tidak ada data di LocalStorage, langsung gunakan DEFAULT_SHIPMENTS agar visual peta penuh kontainer di awal
+        let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_logistics_v12_kg')) || [...DEFAULT_SHIPMENTS];
 
         // Tahapan Milestones Multi-Hub Logistik
         const STATUS_STEPS = [
@@ -1113,6 +1198,7 @@
             renderList();
             renderDetail();
             renderMetrics();
+            renderGlobalFleetMap(); // Panggil fungsi peta monitoring armada global
             setupEventListeners();
         }
 
@@ -1121,6 +1207,7 @@
             document.getElementById('searchBarGlobal').addEventListener('input', (e) => {
                 searchQuery = e.target.value;
                 renderList();
+                renderGlobalFleetMap(); // Filter juga peta global secara real-time
             });
 
             // Upload foto kargo dan resize otomatis ke format JPEG ringan
@@ -1182,6 +1269,103 @@
             document.getElementById('metricDeliveredBar').style.width = `${deliveredPercent}%`;
         }
 
+        // FUNGSI BARU: RENDERING INTERACTIVE GLOBAL FLEET TRACKING MAP
+        function renderGlobalFleetMap() {
+            const gridContainer = document.getElementById('globalFleetGrid');
+            if (!gridContainer) return;
+
+            gridContainer.innerHTML = '';
+
+            // Loop melalui setiap tahapan rute logistik maritim (0-5)
+            STATUS_STEPS.forEach((step, idx) => {
+                // Saring kontainer yang saat ini berada di tahapan ini
+                const matchingShipments = SHIPMENTS.filter(ship => {
+                    const isInThisStage = ship.currentStatusIndex === idx;
+                    
+                    // Hubungkan dengan filter pencarian jika ada kata kunci pencarian aktif
+                    if (searchQuery) {
+                        const q = searchQuery.toLowerCase();
+                        const matchesSearch = 
+                            ship.id.toLowerCase().includes(q) ||
+                            ship.containerId.toLowerCase().includes(q) ||
+                            ship.itemName.toLowerCase().includes(q) ||
+                            ship.department.toLowerCase().includes(q);
+                        return isInThisStage && matchesSearch;
+                    }
+                    return isInThisStage;
+                });
+
+                // Buat kolom untuk tahapan ini
+                const col = document.createElement('div');
+                col.className = "flex flex-col bg-slate-950 border border-slate-800 rounded-xl p-3 h-48 space-y-2 relative";
+                
+                // Judul Kolom Hub
+                col.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-1.5">
+                        <span class="text-[9px] font-extrabold uppercase tracking-wide text-slate-300 truncate pr-1" title="${step.title}">
+                            ${step.icon} ${step.title}
+                        </span>
+                        <span class="text-[9px] font-bold bg-slate-900 text-amber-500 px-1.5 py-0.5 rounded-full font-mono">
+                            ${matchingShipments.length}
+                        </span>
+                    </div>
+                    <div class="flex flex-col gap-1.5 overflow-y-auto flex-1 pr-1" id="fleet-stage-${idx}">
+                    </div>
+                `;
+
+                gridContainer.appendChild(col);
+                const listStageContainer = document.getElementById(`fleet-stage-${idx}`);
+
+                // Jika tidak ada kontainer di tahap ini, render placeholder kosong
+                if (matchingShipments.length === 0) {
+                    listStageContainer.innerHTML = `
+                        <div class="flex-1 flex items-center justify-center border border-dashed border-slate-800/50 rounded-lg py-4 text-center">
+                            <span class="text-[9px] text-slate-700 italic">Kosong</span>
+                        </div>
+                    `;
+                } else {
+                    // Render kontainer dalam bentuk tag mini card interaktif
+                    matchingShipments.forEach(ship => {
+                        const isSelected = ship.id === selectedId;
+                        const card = document.createElement('div');
+                        
+                        // Menentukan warna badge berdasarkan Kategori/Departemen
+                        let deptColor = "border-sky-500/20 bg-sky-500/5 text-sky-400";
+                        if (ship.category.includes("Tembaga")) {
+                            deptColor = "border-amber-500/20 bg-amber-500/5 text-amber-400";
+                        } else if (ship.category.includes("B3")) {
+                            deptColor = "border-red-500/20 bg-red-500/5 text-red-400";
+                        } else if (ship.category.includes("Aset")) {
+                            deptColor = "border-purple-500/20 bg-purple-500/5 text-purple-400";
+                        }
+
+                        card.className = `p-1.5 rounded-lg border text-[9px] transition-all cursor-pointer active:scale-95 ${
+                            isSelected 
+                                ? 'ring-1 ring-amber-500 border-amber-500 bg-amber-500/10' 
+                                : `hover:bg-slate-900 ${deptColor}`
+                        }`;
+                        card.onclick = (e) => {
+                            e.stopPropagation();
+                            selectShipment(ship.id);
+                        };
+
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between font-mono font-bold leading-none mb-0.5">
+                                <span class="truncate">${ship.containerId}</span>
+                                <span class="text-[8px] bg-slate-900 px-1 py-0.2 rounded text-slate-400">${ship.id.split('-').pop()}</span>
+                            </div>
+                            <div class="text-[8px] font-semibold text-slate-300 truncate leading-tight">${ship.itemName}</div>
+                            <div class="text-[7px] text-slate-500 flex justify-between mt-1 pt-0.5 border-t border-slate-800/40">
+                                <span>${ship.weight.toLocaleString('id-ID')} KG</span>
+                                <span class="truncate max-w-[45px]" title="${ship.destination}">${ship.destination.split(' ')[0]}</span>
+                            </div>
+                        `;
+                        listStageContainer.appendChild(card);
+                    });
+                }
+            });
+        }
+
         // TABS FILTER CONTROLLER
         function switchTab(tab) {
             currentTab = tab;
@@ -1208,6 +1392,7 @@
                     ship.containerId.toLowerCase().includes(q) ||
                     ship.sku.toLowerCase().includes(q) ||
                     ship.itemName.toLowerCase().includes(q) ||
+                    ship.department.toLowerCase().includes(q) ||
                     ship.destination.toLowerCase().includes(q);
 
                 if (!matchesSearch) return false;
@@ -1291,6 +1476,7 @@
             document.getElementById('btnScreenExcelNotif').innerText = selectedId.split('-').pop();
             renderList();
             renderDetail();
+            renderGlobalFleetMap(); // Selaraskan status highlight pada peta monitor
             if (currentMainScreen === 'excel') {
                 renderExcelScreen();
             }
@@ -1653,6 +1839,7 @@
             renderList();
             renderDetail();
             renderMetrics();
+            renderGlobalFleetMap(); // Perbarui peta tracking global
             if (currentMainScreen === 'excel') {
                 renderExcelScreen();
             }
@@ -1705,6 +1892,7 @@
             renderList();
             renderDetail();
             renderMetrics();
+            renderGlobalFleetMap(); // Perbarui peta tracking global
             if (currentMainScreen === 'excel') {
                 renderExcelScreen();
             }
@@ -1748,6 +1936,7 @@
             renderList();
             renderDetail();
             renderMetrics();
+            renderGlobalFleetMap(); // Perbarui peta tracking global
             if (currentMainScreen === 'excel') {
                 renderExcelScreen();
             }
@@ -1759,7 +1948,8 @@
                 return;
             }
 
-            let csvContent = "\uFEFF"; 
+            // Deklarasi separator eksplisit agar langsung terbaca di regional Indonesia/Excel standar
+            let csvContent = "\uFEFFsep=,\r\n"; 
             const headers = [
                 "ID Outbound", "No Kontainer", "Originator", "SKU / Cost Center", "Deskripsi Barang", 
                 "Kategori", "Departemen", "Qty", "Satuan", "Berat (KG)", "Panjang (CM)", 
@@ -1819,7 +2009,7 @@
                 containerId: newContainerId,
                 originator: document.getElementById('newOriginator').value,
                 sku: document.getElementById('newSku').value,
-                itemName: document.getElementById('newItemName').value,
+                itemName: document.getElementById('newItemName').value.toUpperCase(),
                 category: document.getElementById('newCategory').value,
                 department: document.getElementById('newDepartment').value,
                 carrier: document.getElementById('newCarrier').value,
