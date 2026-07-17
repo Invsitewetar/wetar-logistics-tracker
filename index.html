@@ -129,7 +129,6 @@
         </div>
     </header>
 
-    <!-- SEARCH BAR PENCARIAN -->
     <div class="max-w-7xl mx-auto px-4 pt-4 sm:px-6 lg:px-8 no-print">
         <div class="relative w-full">
             <input
@@ -147,7 +146,6 @@
     <!-- MAIN CONTAINER -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 no-print">
         
-        <!-- RINGKASAN METRIK DASHBOARD -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-slate-800 shadow-sm relative overflow-hidden">
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Outbound</p>
@@ -194,7 +192,6 @@
             </div>
         </div>
 
-        <!-- FITUR BARU: GLOBAL FLEET TRACKER MAP & COMMAND CENTER -->
         <div id="fleetCommandSection" class="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-xl mb-6 no-print space-y-4">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2.5">
@@ -323,7 +320,6 @@
                             </div>
                         </div>
 
-                        <!-- Spesifikasi Tabel Metadata -->
                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800/80 text-xs">
                             <div>
                                 <p class="text-slate-500 font-semibold mb-0.5">Kategori</p>
@@ -358,7 +354,6 @@
                             </div>
                         </div>
 
-                        <!-- DETAIL FOTO & PETA MULTI-HUB RESPONSIVE GRID -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             
                             <!-- BAR KOLOM VISUALISASI JALUR LAUT DARI WETAR -->
@@ -443,7 +438,6 @@
 
                         </div>
 
-                        <!-- PROGRESS MILESTONES & TIMELINE -->
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <h3 class="font-bold text-xs md:text-sm text-slate-200 flex items-center gap-2">
@@ -468,7 +462,6 @@
                         </div>
                     </div>
 
-                    <!-- ACTION CENTER & SIMULASI CHECKPOINT -->
                     <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 shadow-xl space-y-4">
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
                             <div>
@@ -534,7 +527,6 @@
                     </div>
                 </div>
 
-                <!-- TAMPILAN 2: EXCEL FORM REALISTIC VIEW (DILAYAR UTAMA) -->
                 <div id="screenExcelArea" class="hidden space-y-4">
                     <!-- Floating print action top of sheet -->
                     <div class="flex items-center justify-between bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
@@ -725,7 +717,6 @@
         </div>
     </main>
 
-    <!-- AREA CETAK FORM OUTBOUND BERGAYA EXCEL PREMIUM (HIDDEN ON SCREEN, ONLY VISIBLE ON PRINT) -->
     <div id="printAreaContainer" class="hidden w-[210mm] min-h-[297mm] p-6 bg-white text-black text-[10px] leading-snug mx-auto border border-gray-300">
         <div class="grid grid-cols-4 items-center border-b-2 border-black pb-4 mb-3">
             <div class="col-span-1 flex space-x-1 items-center">
@@ -879,7 +870,6 @@
         </div>
     </div>
 
-    <!-- MODAL POPUP: REGISTRASI OUTBOUND BARU -->
     <div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-sm p-4 no-print">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl overflow-y-auto max-h-[90vh] shadow-2xl animate-in fade-in zoom-in-95 duration-150">
             <div class="bg-slate-950 p-4 border-b border-slate-800 flex items-center justify-between sticky top-0 z-10">
@@ -898,7 +888,7 @@
                     </div>
                     <div class="space-y-1">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Tracking ID (Otomatis)</label>
-                        <input type="text" id="newId" placeholder="Contoh: BTR-MOB-PLT-SWI-516" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none">
+                        <input type="text" id="newId" placeholder="Contoh: OB-2026-005" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none">
                     </div>
                     <div class="space-y-1">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Nomor Kontainer</label>
@@ -1044,109 +1034,174 @@
         <p class="mt-1">Sistem informasi lacak kontainer rute Wetar -> Kupang HUB -> Surabaya HUB (SUB) -> BSI / PANI / Konawe SCM.</p>
     </footer>
 
-    <!-- JAVASCRIPT STATE ENGINE & CACHE CONTROLLER -->
     <script>
         // Data bawaan berkualitas tinggi bermotif persis berkas asli BTR-516 dan kasus logistik riil lainnya
         const DEFAULT_SHIPMENTS = [
             {
-                id: "BTR-MOB-PLT-SWI-516",
-                containerId: "TAKU2315722",
+                id: "OB-2026-001",
+                containerId: "CON-WTR-8812",
                 originator: "Bayu Aji Sena",
                 sku: "BTRWWEMEE6-6784",
-                itemName: "RADIATOR EXS-WARRANTY GS1007",
+                itemName: "Copper Cathode Grade A",
+                category: "Produk Utama (Tembaga)",
+                department: "Logistics & Warehouse",
+                qty: 1,
+                unit: "Palet",
+                weight: 25000,
+                length: 200,
+                width: 100,
+                height: 190,
+                carrier: "LCT Merdeka Jaya V.12",
+                origin: "Wetar Island Site",
+                destination: "BSI (Bumi Suksesindo)",
+                reason: "OTHER",
+                remarks: "Tembaga Katoda Grade A kemasan palet standar industri",
+                approver: "Wasiman W",
+                phone: "Nashrul Alfan",
+                deliveryAddress: "PT BUMI SUKSESINDO, SITE BANYUWANGI, JAWA TIMUR, INDONESIA",
+                currentStatusIndex: 5, // Delivered & Received
+                lastUpdated: "2026-07-16 14:30 WIT",
+                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230f172a'/><rect x='30' y='50' width='240' height='110' fill='%23b45309' stroke='%23f59e0b' stroke-width='4'/><line x1='30' y1='105' x2='270' y2='105' stroke='%2378350f' stroke-width='2'/><text x='150' y='110' font-family='sans-serif' font-size='15' font-weight='black' fill='%23fef08a' text-anchor='middle'>PALLET TEMBAGA KATODA</text></svg>",
+                history: [
+                    { status: "Delivered & Received", location: "BSI Site Banyuwangi", time: "2026-07-16 14:30 WIT", desc: "Kargo Tembaga Katoda telah sukses dibongkar dan diterima penuh oleh tim logistik BSI." },
+                    { status: "Arrived at SUB HUB", location: "Depo Sortir Tanjung Perak Surabaya", time: "2026-07-15 11:30 WIT", desc: "Kontainer diturunkan dari kapal kontainer liner di Surabaya." },
+                    { status: "Arrived at Kupang HUB", location: "Tenau Port Kupang", time: "2026-07-14 09:15 WIT", desc: "Proses transit dari kapal LCT ke kapal container utama Meratus." },
+                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-13 14:15 WIT", desc: "Dimuat di LCT Merdeka Jaya V.12 pelabuhan khusus Wetar." },
+                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-12 10:00 WIT", desc: "Persetujuan jembatan timbang dan bea keluar site disetujui." },
+                    { status: "Draft & Packed", location: "Warehouse Wetar Site", time: "2026-07-11 08:30 WIT", desc: "Penimbangan kargo katoda dan penguncian segel kontainer baja." }
+                ]
+            },
+            {
+                id: "OB-2026-002",
+                containerId: "CON-WTR-9905",
+                originator: "Sandi Wijaya",
+                sku: "BTR-PUMP-CAT-320",
+                itemName: "Hydraulic Pump Excavator CAT 320",
                 category: "Sparepart / Komponen",
                 department: "Maintenance Workshop",
                 qty: 1,
                 unit: "Box",
-                weight: 1350,
-                length: 200,
-                width: 100,
-                height: 190,
-                carrier: "LCT P17 VOY 1215",
+                weight: 4200,
+                length: 150,
+                width: 120,
+                height: 140,
+                carrier: "LCT Citra Bahari V.03",
+                origin: "Wetar Island Site",
+                destination: "PANI Gold Project",
+                reason: "REPAIR",
+                remarks: "Komponen Hidrolik Utama eks Excavator CAT320 untuk rekondisi",
+                approver: "Hendra Wijaya",
+                phone: "Dani Setiawan",
+                deliveryAddress: "PANI GOLD PROJECT SITE, GORONTALO, SULAWESI, INDONESIA",
+                currentStatusIndex: 3, // Arrived at Kupang HUB
+                lastUpdated: "2026-07-16 14:30 WIT",
+                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%231e293b'/><rect x='40' y='30' width='220' height='140' fill='%2378350f' stroke='%23f59e0b' stroke-width='4'/><text x='150' y='110' font-family='sans-serif' font-size='14' font-weight='bold' fill='%23f59e0b' text-anchor='middle'>PETI HYDRAULIC PUMP</text></svg>",
+                history: [
+                    { status: "Arrived at Kupang HUB", location: "Transit Tenau Kupang", time: "2026-07-16 14:30 WIT", desc: "Kontainer telah tiba di pelabuhan transit Kupang dan masuk daftar tunggu muat kapal kontainer utama." },
+                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-15 16:00 WIT", desc: "Dimuat di LCT Citra Bahari V.03 rute Wetar -> Kupang." },
+                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-14 11:30 WIT", desc: "Pemeriksaan dokumen kepabeanan dan berat rill selesai." },
+                    { status: "Draft & Packed", location: "Workshop Wetar Site", time: "2026-07-13 09:00 WIT", desc: "Pengepakan unit pompa hidrolik ke peti kayu khusus logistik." }
+                ]
+            },
+            {
+                id: "OB-2026-003",
+                containerId: "CON-WTR-4433",
+                originator: "Sandi Wijaya",
+                sku: "BTR-IBC-TANK-1000",
+                itemName: "Empty IBC Tote Tank (1000L)",
+                category: "Scrap / Sampah Logistik",
+                department: "Logistics & Warehouse",
+                qty: 8,
+                unit: "Unit",
+                weight: 1200,
+                length: 480,
+                width: 240,
+                height: 250,
+                carrier: "LCT Merdeka Jaya V.12",
+                origin: "Wetar Island Site",
+                destination: "Konawe SCM",
+                reason: "RETURN",
+                remarks: "Tote tank kosong sisa penyimpanan reagen kimia ramah lingkungan",
+                approver: "Guntur Pratama",
+                phone: "Irfan Logis",
+                deliveryAddress: "SCM SITE KONAWE, SULAWESI TENGGARA, INDONESIA",
+                currentStatusIndex: 2, // Loaded onto Vessel
+                lastUpdated: "2026-07-16 14:30 WIT",
+                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230f172a'/><rect x='60' y='40' width='180' height='120' fill='none' stroke='%23ef4444' stroke-width='4'/><circle cx='150' cy='100' r='30' fill='%231e293b' stroke='%23ef4444' stroke-width='2'/><text x='150' y='105' font-family='sans-serif' font-size='10' font-weight='bold' fill='%23ef4444' text-anchor='middle'>EMPTY TANK</text></svg>",
+                history: [
+                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-16 14:30 WIT", desc: "8 unit IBC Tank kosong telah disusun rapi di dek LCT Merdeka Jaya V.12." },
+                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-15 13:00 WIT", desc: "Surat jalan bebas residu berbahaya terbit dari Departemen HSE." },
+                    { status: "Draft & Packed", location: "Gudang Logistik Wetar", time: "2026-07-14 08:30 WIT", desc: "Pemberian tanda segel pembersihan tangki kosong." }
+                ]
+            },
+            {
+                id: "OB-2026-004",
+                containerId: "CON-WTR-0021",
+                originator: "Sandi Wijaya",
+                sku: "BTR-USED-LUBRICANT",
+                itemName: "Oli Bekas (Used Lubricant Oil)",
+                category: "Limbah B3",
+                department: "HSE (Environment)",
+                qty: 16,
+                unit: "Drum",
+                weight: 3100,
+                length: 300,
+                width: 200,
+                height: 120,
+                carrier: "LCT Pratama Ocean",
+                origin: "Wetar Island Site",
+                destination: "Konawe SCM",
+                reason: "RETURN",
+                remarks: "Limbah oli bekas mesin operasional tambang untuk pengolahan B3 berizin",
+                approver: "Guntur Pratama",
+                phone: "Pak Joko B3",
+                deliveryAddress: "SULAWESI CAHAYA MINERAL (SCM), RECYCLING DEPOT SULAWESI, INDONESIA",
+                currentStatusIndex: 1, // Security Cleared
+                lastUpdated: "2026-07-15 16:30 WIT",
+                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230f172a'/><circle cx='150' cy='100' r='45' fill='%231e293b' stroke='%23ef4444' stroke-width='5'/><path d='M150,75 L150,110' stroke='%23ef4444' stroke-width='6' stroke-linecap='round'/><circle cx='150' cy='125' r='5' fill='%23ef4444'/><text x='150' y='170' font-family='sans-serif' font-size='12' font-weight='bold' fill='%23ef4444' text-anchor='middle'>HAZARDOUS WASTE B3</text></svg>",
+                history: [
+                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-15 16:30 WIT", desc: "Manifest Manifest limbah beracun B3 dari KLHK telah diverifikasi dan lolos segel pelabuhan." },
+                    { status: "Draft & Packed", location: "Temporary Storage Wetar HSE", time: "2026-07-14 13:00 WIT", desc: "Pengisian drum baja bersegel karet anti bocor." }
+                ]
+            },
+            {
+                id: "OB-2026-005",
+                containerId: "CON-WTR-7711",
+                originator: "Bayu Aji Sena",
+                sku: "BTR-ENG-KOMATSU",
+                itemName: "Engine Block Komatsu GD705",
+                category: "Sparepart / Komponen",
+                department: "Maintenance Workshop",
+                qty: 1,
+                unit: "Palet",
+                weight: 5800,
+                length: 250,
+                width: 150,
+                height: 180,
+                carrier: "LCT Pratama Ocean",
                 origin: "Wetar Island Site",
                 destination: "Surabaya HUB (Hanya Transit SUB)",
                 reason: "REPAIR",
-                remarks: "Pengembalian Radiator eks Warranty GS1007 (Lurang)",
+                remarks: "Blok silinder mesin komatsu GD705 untuk overhaul di workshop Surabaya",
                 approver: "Wasiman W",
                 phone: "Nashrul Alfan",
-                deliveryAddress: "PT HARTEKPRIMA LISTRINDO, JL RAYA MARGOREJO INDAH NO 122, KAV.D105 SURABAYA 60239, PHONE (6231)8486 111 FAX (6231)848 4789",
-                currentStatusIndex: 2, // Loaded onto Vessel
-                lastUpdated: "2026-07-17 11:30 WIT",
-                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%231e293b'/><rect x='40' y='30' width='220' height='140' fill='%2378350f' stroke='%23f59e0b' stroke-width='4'/><line x1='40' y1='30' x2='260' y2='170' stroke='%23d97706' stroke-width='3'/><line x1='260' y1='30' x2='40' y2='170' stroke='%23d97706' stroke-width='3'/><rect x='50' y='40' width='200' height='120' fill='none' stroke='%23f59e0b' stroke-width='1' stroke-dasharray='5,5'/><text x='150' y='110' font-family='sans-serif' font-size='14' font-weight='bold' fill='%23f59e0b' text-anchor='middle'>PETI KAYU RADIATOR</text></svg>",
+                deliveryAddress: "WORKSHOP UTAMA PATRA JAYA, SURABAYA, JAWA TIMUR",
+                currentStatusIndex: 0, // Draft & Packed
+                lastUpdated: "2026-07-17 15:00 WIT",
+                photo: "",
                 history: [
-                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-17 11:30 WIT", desc: "Radiator eks-Warranty GS1007 (Lurang) dalam peti kayu telah dimuat di LCT P17 VOY 1215." },
-                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-16 14:15 WIT", desc: "Pemeriksaan dokumen SIO & Surat Jalan No LOG-BKP/BTR-000 selesai disetujui." },
-                    { status: "Draft & Packed", location: "Workshop Wetar Site", time: "2026-07-15 09:00 WIT", desc: "Radiator dikemas dengan Box dimensi 200x100x190 cm." }
-                ]
-            },
-            {
-                id: "BTR-COP-IND-902",
-                containerId: "MSKU8829102",
-                originator: "Dani Setiawan",
-                sku: "BTR-COP-WTR-8812",
-                itemName: "TEMBAGA KATODA (COPPER CATHODE)",
-                category: "Produk Utama (Tembaga)",
-                department: "Mining Operations",
-                qty: 24,
-                unit: "Palet",
-                weight: 24500,
-                length: 600,
-                width: 240,
-                height: 250,
-                carrier: "KM MERATUS KALIMANTAN",
-                origin: "Wetar Island Site",
-                destination: "Konawe SCM",
-                reason: "OTHER",
-                remarks: "Pengiriman konsentrat tembaga katoda murni kualitas ekspor kelas industri",
-                approver: "Hendra Wijaya",
-                phone: "Irfan Logis",
-                deliveryAddress: "PT SULAWESI CAHAYA MINERAL, KONAWE INDUSTRIAL PARK, KONAWE UTARA, SULAWESI TENGGARA",
-                currentStatusIndex: 4, // Arrived at SUB HUB
-                lastUpdated: "2026-07-17 14:45 WIT",
-                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230f172a'/><rect x='30' y='50' width='240' height='110' fill='%23b45309' stroke='%23f59e0b' stroke-width='4'/><line x1='30' y1='105' x2='270' y2='105' stroke='%2378350f' stroke-width='2'/><text x='150' y='110' font-family='sans-serif' font-size='15' font-weight='black' fill='%23fef08a' text-anchor='middle'>PALLET TEMBAGA KATODA</text></svg>",
-                history: [
-                    { status: "Arrived at SUB HUB", location: "Depo Sortir Tanjung Perak Surabaya", time: "2026-07-17 14:45 WIT", desc: "Kontainer telah dibongkar dari kapal pengangkut utama KM Meratus dan sedang dalam proses kliring bea cukai domestik & sortir depo." },
-                    { status: "Arrived at Kupang HUB", location: "Tenau Port Kupang", time: "2026-07-15 10:00 WIT", desc: "Kapal LCT sandar di Kupang. Proses transit dan pemuatan ke kapal container liner (KM Meratus) berhasil." },
-                    { status: "Loaded onto Vessel", location: "Dermaga Wetar Island", time: "2026-07-13 16:00 WIT", desc: "Pemuatan 24 Palet Tembaga Katoda ke lambung LCT sukses." },
-                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-12 11:30 WIT", desc: "Pemeriksaan dokumen kepabeanan dan berat rill selesai di jembatan timbang pelabuhan Wetar." },
-                    { status: "Draft & Packed", location: "Gudang Logistik Wetar", time: "2026-07-10 08:30 WIT", desc: "Produk tembaga diikat kawat baja pada palet dan disegel rapi." }
-                ]
-            },
-            {
-                id: "BTR-ENV-LMB-104",
-                containerId: "TAKU8810294",
-                originator: "Sandi Wijaya",
-                sku: "BTR-HSE-ENV-9012",
-                itemName: "LIMBAH ACCU BEKAS & B3",
-                category: "Limbah B3",
-                department: "HSE (Environment)",
-                qty: 12,
-                unit: "Drum",
-                weight: 4200,
-                length: 120,
-                width: 120,
-                height: 100,
-                carrier: "LCT BINA MARITIM 02",
-                origin: "Wetar Island Site",
-                destination: "BSI (Bumi Suksesindo)",
-                reason: "RETURN",
-                remarks: "Limbah B3 korosif accu bekas sisa alat berat Wetar untuk diolah pihak berizin resmi",
-                approver: "Guntur Pratama",
-                phone: "Pak Joko B3",
-                deliveryAddress: "PENGOLAH LIMBAH B3 PT PRASADHA PAMUNAH LIMBAH INDUSTRI (PPLI), CISARUA BOGOR UP. PT BUMI SUKSESINDO",
-                currentStatusIndex: 1, // Security Cleared
-                lastUpdated: "2026-07-17 08:00 WIT",
-                photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%230f172a'/><circle cx='150' cy='100' r='45' fill='%231e293b' stroke='%23ef4444' stroke-width='5'/><path d='M150,75 L150,110' stroke='%23ef4444' stroke-width='6' stroke-linecap='round'/><circle cx='150' cy='125' r='5' fill='%23ef4444'/><text x='150' y='170' font-family='sans-serif' font-size='12' font-weight='bold' fill='%23ef4444' text-anchor='middle'>HAZARDOUS WASTE B3</text></svg>",
-                history: [
-                    { status: "Security Cleared", location: "Security Port Gate Wetar", time: "2026-07-17 08:00 WIT", desc: "Surat Izin Angkut Limbah B3 dari KLHK telah diverifikasi dan disegel oleh petugas keamanan pelabuhan." },
-                    { status: "Draft & Packed", location: "Temporary Storage Wetar HSE", time: "2026-07-16 13:00 WIT", desc: "Accu bekas dimasukkan ke dalam drum HDPE bersegel tahan asam." }
+                    { status: "Draft & Packed", location: "Workshop Wetar Site", time: "2026-07-17 15:00 WIT", desc: "Pendaftaran unit blok silinder mesin raksasa Komatsu untuk overhaul." }
                 ]
             }
         ];
 
-        // MENGGUNAKAN KEY PENYIMPANAN BARU V12 YANG BENAR-BENAR BERSIH DI BROWSER USER
+        // Menggunakan key penyimpanan baru V12 yang bersih di browser user
         // Jika tidak ada data di LocalStorage, langsung gunakan DEFAULT_SHIPMENTS agar visual peta penuh kontainer di awal
-        let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_logistics_v12_kg')) || [...DEFAULT_SHIPMENTS];
+        let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_logistics_v12_kg'));
+        if (!SHIPMENTS || SHIPMENTS.length === 0) {
+            SHIPMENTS = [...DEFAULT_SHIPMENTS];
+            localStorage.setItem('wetar_logistics_v12_kg', JSON.stringify(SHIPMENTS));
+        }
 
         // Tahapan Milestones Multi-Hub Logistik
         const STATUS_STEPS = [
@@ -1171,7 +1226,6 @@
             localStorage.setItem('wetar_logistics_v12_kg', JSON.stringify(SHIPMENTS));
         }
 
-        // SWITCHER TAMPILAN SCREEN UTAMA (DASHBOARD VS FORM EXCEL)
         function switchMainScreen(screen) {
             currentMainScreen = screen;
             const btnDash = document.getElementById('btnScreenDashboard');
@@ -1250,7 +1304,6 @@
             });
         }
 
-        // RENDERING METRIK DASHBOARD
         function renderMetrics() {
             const total = SHIPMENTS.length;
             const active = SHIPMENTS.filter(s => s.currentStatusIndex < 5).length;
@@ -1260,7 +1313,14 @@
             document.getElementById('metricTotal').innerText = total;
             document.getElementById('metricActive').innerText = active;
             document.getElementById('metricDelivered').innerText = delivered;
-            document.getElementById('metricWeight').innerText = totalWeight.toLocaleString('id-ID') + " KG";
+            
+            // Konversi ke Ton jika berat total sangat besar
+            if (totalWeight >= 1000) {
+                const weightInTon = (totalWeight / 1000).toFixed(1);
+                document.getElementById('metricWeight').innerText = `${weightInTon} Ton`;
+            } else {
+                document.getElementById('metricWeight').innerText = `${totalWeight.toLocaleString('id-ID')} KG`;
+            }
 
             const activePercent = total > 0 ? (active / total) * 100 : 0;
             const deliveredPercent = total > 0 ? (delivered / total) * 100 : 0;
@@ -1269,7 +1329,6 @@
             document.getElementById('metricDeliveredBar').style.width = `${deliveredPercent}%`;
         }
 
-        // FUNGSI BARU: RENDERING INTERACTIVE GLOBAL FLEET TRACKING MAP
         function renderGlobalFleetMap() {
             const gridContainer = document.getElementById('globalFleetGrid');
             if (!gridContainer) return;
@@ -1297,7 +1356,7 @@
 
                 // Buat kolom untuk tahapan ini
                 const col = document.createElement('div');
-                col.className = "flex flex-col bg-slate-950 border border-slate-800 rounded-xl p-3 h-48 space-y-2 relative";
+                col.className = "flex flex-col bg-slate-950 border border-slate-800/80 rounded-xl p-3 h-52 space-y-2 relative";
                 
                 // Judul Kolom Hub
                 col.innerHTML = `
@@ -1319,8 +1378,8 @@
                 // Jika tidak ada kontainer di tahap ini, render placeholder kosong
                 if (matchingShipments.length === 0) {
                     listStageContainer.innerHTML = `
-                        <div class="flex-1 flex items-center justify-center border border-dashed border-slate-800/50 rounded-lg py-4 text-center">
-                            <span class="text-[9px] text-slate-700 italic">Kosong</span>
+                        <div class="flex-1 flex items-center justify-center border border-dashed border-slate-900 rounded-lg py-4 text-center">
+                            <span class="text-[9px] text-slate-700 italic">Tidak ada</span>
                         </div>
                     `;
                 } else {
@@ -1333,9 +1392,9 @@
                         let deptColor = "border-sky-500/20 bg-sky-500/5 text-sky-400";
                         if (ship.category.includes("Tembaga")) {
                             deptColor = "border-amber-500/20 bg-amber-500/5 text-amber-400";
-                        } else if (ship.category.includes("B3")) {
+                        } else if (ship.category.includes("B3") || ship.category.includes("Limbah")) {
                             deptColor = "border-red-500/20 bg-red-500/5 text-red-400";
-                        } else if (ship.category.includes("Aset")) {
+                        } else if (ship.category.includes("Aset") || ship.category.includes("Berat")) {
                             deptColor = "border-purple-500/20 bg-purple-500/5 text-purple-400";
                         }
 
@@ -1349,14 +1408,16 @@
                             selectShipment(ship.id);
                         };
 
+                        const weightDisplay = ship.weight >= 1000 ? `${(ship.weight/1000).toFixed(1)} Ton` : `${ship.weight} KG`;
+
                         card.innerHTML = `
                             <div class="flex items-center justify-between font-mono font-bold leading-none mb-0.5">
                                 <span class="truncate">${ship.containerId}</span>
-                                <span class="text-[8px] bg-slate-900 px-1 py-0.2 rounded text-slate-400">${ship.id.split('-').pop()}</span>
+                                <span class="text-[7px] bg-slate-900 px-1 py-0.2 rounded text-slate-400">${ship.id.split('-').pop()}</span>
                             </div>
                             <div class="text-[8px] font-semibold text-slate-300 truncate leading-tight">${ship.itemName}</div>
                             <div class="text-[7px] text-slate-500 flex justify-between mt-1 pt-0.5 border-t border-slate-800/40">
-                                <span>${ship.weight.toLocaleString('id-ID')} KG</span>
+                                <span>${weightDisplay}</span>
                                 <span class="truncate max-w-[45px]" title="${ship.destination}">${ship.destination.split(' ')[0]}</span>
                             </div>
                         `;
@@ -1380,7 +1441,6 @@
             renderList();
         }
 
-        // RENDER LIST MANIFEST
         function renderList() {
             const listContainer = document.getElementById('shipmentList');
             listContainer.innerHTML = '';
@@ -1410,7 +1470,7 @@
                         <span class="text-3xl">📦</span>
                         <p>Belum ada kargo terdaftar.</p>
                         <button onclick="loadMockData()" class="text-[10px] text-amber-500 font-semibold hover:underline">
-                            Muat Data Radiator BTR-516 (Contoh Berkas)
+                            Muat Data Contoh Wetar (Default)
                         </button>
                     </div>
                 `;
@@ -1482,7 +1542,6 @@
             }
         }
 
-        // RENDER PANEL DETAIL BARANG
         function renderDetail() {
             const ship = SHIPMENTS.find(s => s.id === selectedId);
             
@@ -1514,7 +1573,9 @@
             document.getElementById('detailItemName').innerText = ship.itemName;
             document.getElementById('detailOrigin').innerText = ship.origin;
             document.getElementById('detailQty').innerText = `${ship.qty} ${ship.unit}`;
-            document.getElementById('detailWeight').innerText = `(${ship.weight.toLocaleString('id-ID')} KG)`;
+
+            const weightDisplay = ship.weight >= 1000 ? `${(ship.weight/1000).toFixed(1)} Ton` : `${ship.weight} KG`;
+            document.getElementById('detailWeight').innerText = `(${weightDisplay})`;
 
             document.getElementById('detailCategory').innerText = ship.category;
             document.getElementById('detailDepartment').innerText = ship.department || "Maintenance Workshop";
@@ -1616,7 +1677,6 @@
                 milestoneContainer.appendChild(node);
             });
 
-            // RENDERING HISTORI LINIMASA VERTIKAL (SHOPEE STYLE)
             const timelineContainer = document.getElementById('verticalTimeline');
             timelineContainer.innerHTML = '';
             ship.history.forEach((log, idx) => {
@@ -1651,7 +1711,7 @@
                                 ${log.status}
                             </h4>
                             <span class="text-[9px] text-slate-500 font-mono-custom flex items-center gap-1">
-                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/></svg>
                                 ${log.time}
                             </span>
                         </div>
@@ -1684,7 +1744,6 @@
             syncPrintArea(ship);
         }
 
-        // RENDER DAN SYNC LAYAR FORM EXCEL DI SCREEN TAB 2
         function renderExcelScreen() {
             const ship = SHIPMENTS.find(s => s.id === selectedId);
             if (!ship) return;
@@ -1803,7 +1862,6 @@
             else document.getElementById('checkOther').checked = true;
         }
 
-        // CONTROL MANIPULASI STATUS
         function setStepStatus(stepIndex) {
             SHIPMENTS = SHIPMENTS.map(ship => {
                 if (ship.id === selectedId) {
@@ -1942,7 +2000,6 @@
             }
         }
 
-        // EXCEL DOWNLOAD EXPORTER
         function exportToCSV() {
             if (SHIPMENTS.length === 0) {
                 return;
@@ -1985,8 +2042,8 @@
 
         // MODAL MANAGEMENT
         function openAddModal() {
-            document.getElementById('newId').value = `BTR-MOB-PLT-SWI-${Math.floor(100 + Math.random() * 900)}`;
-            document.getElementById('newContainerId').value = `TAKU${Math.floor(2000000 + Math.random() * 900000)}`;
+            document.getElementById('newId').value = `OB-2026-00${SHIPMENTS.length + 1}`;
+            document.getElementById('newContainerId').value = `CON-WTR-${Math.floor(1000 + Math.random() * 9000)}`;
             tempPhotoBase64 = "";
             document.getElementById('newPhoto').value = "";
             document.getElementById('addModal').classList.remove('hidden');
@@ -1998,7 +2055,7 @@
 
         function handleNewShipment(e) {
             e.preventDefault();
-            const newId = document.getElementById('newId').value || `BTR-MOB-PLT-SWI-${Math.floor(100 + Math.random() * 900)}`;
+            const newId = document.getElementById('newId').value || `OB-2026-00${SHIPMENTS.length + 1}`;
             const newContainerId = document.getElementById('newContainerId').value;
             
             const now = new Date();
@@ -2009,7 +2066,7 @@
                 containerId: newContainerId,
                 originator: document.getElementById('newOriginator').value,
                 sku: document.getElementById('newSku').value,
-                itemName: document.getElementById('newItemName').value.toUpperCase(),
+                itemName: document.getElementById('newItemName').value,
                 category: document.getElementById('newCategory').value,
                 department: document.getElementById('newDepartment').value,
                 carrier: document.getElementById('newCarrier').value,
