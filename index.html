@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wetar Outbound & Container Tracking Dashboard</title>
-    <!-- Tailwind CSS for modern responsive styling -->
+    <!-- Tailwind CSS untuk tata letak modern responsif -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Premium Google Fonts -->
+    <!-- Google Fonts Premium -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
     
     <style>
@@ -16,7 +16,7 @@
         .font-mono-custom {
             font-family: 'JetBrains Mono', monospace;
         }
-        /* Custom scrollbar for premium aesthetic */
+        /* Desain scrollbar modern premium */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -31,7 +31,7 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #f59e0b;
         }
-        /* Realistic smooth ship floating animation */
+        /* Animasi kapal laut mengapung */
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-4px) rotate(2deg); }
@@ -41,13 +41,13 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        /* PRINT STYLING FOR OUTBOUND FORM EXCEL EXCLUSIVELY */
+        /* SISTEM STYLE KHUSUS PRINT FORM EXCEL */
         @media print {
             body {
                 background: white !important;
                 color: black !important;
             }
-            /* Sembunyikan seluruh UI web screen */
+            /* Sembunyikan seluruh UI luar layar saat print */
             body > *:not(#printAreaContainer) {
                 display: none !important;
             }
@@ -72,7 +72,7 @@
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased pb-12">
 
-    <!-- HEADER UTAMA -->
+    <!-- HEADER NAVIGASI UTAMA -->
     <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-md no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
             <div class="flex items-center space-x-3">
@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <!-- TAB SCREEN SWITCHER (DASHBOARD VS FORM EXCEL) -->
+            <!-- TAB SCREEN SWITCHER (DASHBOARD VS FORM EXCEL PADA LAYAR UTAMA) -->
             <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800/80">
                 <button
                     onclick="switchMainScreen('dashboard')"
@@ -104,9 +104,9 @@
                 </button>
             </div>
 
-            <!-- Header Action Buttons -->
+            <!-- Aksi Tombol Cepat -->
             <div class="flex items-center space-x-2">
-                <!-- Green Download Excel Button -->
+                <!-- Unduh Manifes Excel -->
                 <button
                     onclick="exportToCSV()"
                     class="flex items-center space-x-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg active:scale-95 transition-all shadow-lg shadow-emerald-600/15 text-xs"
@@ -118,7 +118,7 @@
                     <span class="hidden sm:inline">Unduh Excel</span>
                 </button>
 
-                <!-- Yellow Add Outbound Button -->
+                <!-- Outbound Baru -->
                 <button
                     onclick="openAddModal()"
                     class="flex items-center space-x-1.5 px-3 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 active:scale-95 transition-all shadow-lg shadow-amber-500/15 text-xs"
@@ -130,7 +130,7 @@
         </div>
     </header>
 
-    <!-- SEARCH BAR MOBILE / DESKTOP ALIGNMENT -->
+    <!-- SEARCH BAR PENCARIAN -->
     <div class="max-w-7xl mx-auto px-4 pt-4 sm:px-6 lg:px-8 no-print">
         <div class="relative w-full">
             <input
@@ -150,7 +150,6 @@
         
         <!-- RINGKASAN METRIK DASHBOARD -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <!-- Widget Total Outbound -->
             <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-slate-800 shadow-sm relative overflow-hidden">
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Outbound</p>
                 <div class="flex items-baseline justify-between mt-1">
@@ -162,7 +161,6 @@
                 </div>
             </div>
 
-            <!-- Widget In Transit -->
             <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-slate-800 shadow-sm">
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Sedang Transit / Layar</p>
                 <div class="flex items-baseline justify-between mt-1">
@@ -174,7 +172,6 @@
                 </div>
             </div>
 
-            <!-- Widget Delivered -->
             <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-slate-800 shadow-sm">
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Tiba Di Tujuan (Delivered)</p>
                 <div class="flex items-baseline justify-between mt-1">
@@ -186,7 +183,6 @@
                 </div>
             </div>
 
-            <!-- Widget Total Berat -->
             <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-slate-800 shadow-sm">
                 <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Berat Keluar Site</p>
                 <div class="flex items-baseline justify-between mt-1">
@@ -241,7 +237,7 @@
 
                 <!-- LIST CONTAINER SCROLLABLE -->
                 <div id="shipmentList" class="space-y-3 overflow-y-auto max-h-[580px] pr-1">
-                    <!-- Barang akan dirender di sini via Javascript -->
+                    <!-- Barang dirender dinamis di sini -->
                 </div>
             </div>
 
@@ -254,7 +250,7 @@
                         
                         <!-- Top Actions inside Card (Hapus & Print Form Buttons) -->
                         <div class="absolute top-4 right-4 z-10 flex gap-2">
-                            <!-- Toggle Excel view on screen button -->
+                            <!-- Tombol Toggle Switch Screen ke Form Excel -->
                             <button
                                 onclick="switchMainScreen('excel')"
                                 class="text-[10px] font-bold text-amber-400 border border-amber-500/20 bg-amber-500/10 hover:bg-amber-500 hover:text-slate-950 px-2.5 py-1.5 rounded transition-all flex items-center gap-1 active:scale-95"
@@ -418,7 +414,7 @@
 
                         </div>
 
-                        <!-- PROGRESS MILESTONES -->
+                        <!-- PROGRESS MILESTONES & TIMELINE -->
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <h3 class="font-bold text-xs md:text-sm text-slate-200 flex items-center gap-2">
@@ -433,7 +429,7 @@
                                 <!-- Renders dynamically -->
                             </div>
 
-                            <!-- LINIMASA HISTORI DETAILED -->
+                            <!-- LINIMASA HISTORI DETAILED (SHOPEE STYLE) -->
                             <div class="space-y-3">
                                 <h4 class="text-xs font-bold text-slate-400">Riwayat Perjalanan (Shopee Style)</h4>
                                 <div id="verticalTimeline" class="bg-slate-950 rounded-xl border border-slate-800/80 p-5 space-y-5">
@@ -525,7 +521,7 @@
                         </button>
                     </div>
 
-                    <!-- CONTAINER PALE WHITE EXCEL PAPER VIEW -->
+                    <!-- CONTAINER KERTAS PUTIH EXCEL PAPER VIEW -->
                     <div class="bg-white text-black p-8 rounded-xl border border-slate-300 shadow-2xl overflow-x-auto min-w-[780px]">
                         
                         <!-- Header Form Merdeka -->
@@ -629,7 +625,6 @@
                                 <!-- Originator Sign -->
                                 <div class="p-2 flex flex-col justify-between items-center h-full">
                                     <p class="font-bold uppercase text-[7px]">Prepared / Submitted By</p>
-                                    <!-- Drawing real pen scribble using SVG -->
                                     <svg class="w-16 h-8 text-blue-600" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M10,25 Q25,5 35,22 T55,18 T75,25 T90,15" stroke-linecap="round"/>
                                         <path d="M20,20 L80,20" stroke-width="1" stroke-dasharray="2,2"/>
@@ -643,7 +638,6 @@
                                 <!-- Manager Sign -->
                                 <div class="p-2 flex flex-col justify-between items-center h-full">
                                     <p class="font-bold uppercase text-[7px]">Manager Dept Approval</p>
-                                    <!-- Drawing manager signature in black pen -->
                                     <svg class="w-16 h-8 text-slate-800" viewBox="0 0 100 40" fill="none" stroke="currentColor" stroke-width="2.5">
                                         <path d="M15,30 C30,10 40,5 45,25 C50,35 60,10 70,22 C75,28 85,15 90,30" stroke-linecap="round"/>
                                     </svg>
@@ -704,7 +698,6 @@
 
     <!-- AREA CETAK FORM OUTBOUND BERGAYA EXCEL PREMIUM (HIDDEN ON SCREEN, ONLY VISIBLE ON PRINT) -->
     <div id="printAreaContainer" class="hidden w-[210mm] min-h-[297mm] p-6 bg-white text-black text-[10px] leading-snug mx-auto border border-gray-300">
-        <!-- Header Print Area identical to Excel View -->
         <div class="grid grid-cols-4 items-center border-b-2 border-black pb-4 mb-3">
             <div class="col-span-1 flex space-x-1 items-center">
                 <span class="font-extrabold text-2xl tracking-tight text-yellow-600">MERDEKA</span>
@@ -994,7 +987,6 @@
                         <input type="text" id="newRemarks" value="Pengembalian Radiator eks Warranty GS1007 (Lurang)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none">
                     </div>
 
-                    <!-- FOTO FISIK CARGO FILE UPLOADER -->
                     <div class="space-y-1 sm:col-span-2">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Foto Fisik Muatan / Kondisi Barang</label>
                         <div class="flex items-center gap-3 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
@@ -1003,7 +995,6 @@
                         </div>
                     </div>
 
-                    <!-- INPUT ALAMAT PENERIMA KUSTOM -->
                     <div class="space-y-1 sm:col-span-2">
                         <label class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Detail Alamat Penerima / Deliver To (Vendor, Alamat, Telp)</label>
                         <textarea id="newDeliveryAddress" rows="3" placeholder="Contoh: PT HARTEKPRIMA LISTRINDO, JL RAYA MARGOREJO INDAH NO 122..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none" required>PT HARTEKPRIMA LISTRINDO, JL RAYA MARGOREJO INDAH NO 122, KAV.D105 SURABAYA 60239, PHONE (6231)8486 111 FAX (6231)848 4789</textarea>
@@ -1018,15 +1009,15 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
+    <!-- FOOTER WEBSITE -->
     <footer class="bg-slate-900 border-t border-slate-800 py-6 mt-12 text-center text-xs text-slate-500 no-print">
         <p>© 2026 Wetar Island Copper Mine Logistical System. All Rights Reserved.</p>
         <p class="mt-1">Sistem informasi lacak kontainer rute Wetar -> Kupang HUB -> Surabaya HUB (SUB) -> BSI / PANI / Konawe SCM.</p>
     </footer>
 
-    <!-- LOGIKA JAVASCRIPT UTAMA (STATE MANAGEMENT) -->
+    <!-- JAVASCRIPT STATE ENGINE & CACHE CONTROLLER -->
     <script>
-        // SATUAN BERAT BARU DAN CLEAR FORCE CACHE UNTUK KEY LAMA 'wetar_shipments_clean_v8_kg' atau 'wetar_shipments'
+        // MEMBERSIHKAN SECARA PAKSA CACHE-CACHE LAMA AGAR TIDAK TERJADI BENTROK "TON"
         if (localStorage.getItem('wetar_shipments_clean_v8_kg')) {
             localStorage.removeItem('wetar_shipments_clean_v8_kg');
         }
@@ -1034,7 +1025,7 @@
             localStorage.removeItem('wetar_shipments');
         }
 
-        // Data pengiriman bawaan berkualitas tinggi sesuai dengan image_2d5902.png (Radiator asli)
+        // Data bawaan berkualitas tinggi bermotif persis berkas asli BTR-516
         const DEFAULT_SHIPMENTS = [
             {
                 id: "BTR-MOB-PLT-SWI-516",
@@ -1069,10 +1060,10 @@
             }
         ];
 
-        // MENGGUNAKAN KEY BARU V12_KG YANG 100% BERSIH DI BROWSER USER
+        // MENGGUNAKAN KEY PENYIMPANAN BARU V12 YANG BENAR-BENAR BERSIH DI BROWSER USER
         let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_logistics_v12_kg')) || [];
 
-        // Milestones Multi-Hub Logistik
+        // Tahapan Milestones Multi-Hub Logistik
         const STATUS_STEPS = [
             { title: "Draft & Packed", subtitle: "Gudang Wetar", icon: "📦" },
             { title: "Security Cleared", subtitle: "Port Wetar", icon: "🛡️" },
@@ -1082,7 +1073,7 @@
             { title: "Delivered & Received", subtitle: "Tujuan Akhir", icon: "🎯" }
         ];
 
-        // Global State variables
+        // Status Variabel Global
         let selectedId = SHIPMENTS.length > 0 ? SHIPMENTS[0].id : null;
         let currentTab = "all"; // 'all', 'active', 'delivered'
         let currentMainScreen = "dashboard"; // 'dashboard' or 'excel'
@@ -1090,12 +1081,12 @@
         let deleteConfirmActive = false;
         let tempPhotoBase64 = "";
 
-        // Simpan data terkini ke LocalStorage
+        // Fungsi menyimpan data ke LocalStorage
         function saveToLocalStorage() {
             localStorage.setItem('wetar_logistics_v12_kg', JSON.stringify(SHIPMENTS));
         }
 
-        // SCREEN SWITCHER CONTROLLER (DASHBOARD VS EXCEL VIEW)
+        // SWITCHER TAMPILAN SCREEN UTAMA (DASHBOARD VS FORM EXCEL)
         function switchMainScreen(screen) {
             currentMainScreen = screen;
             const btnDash = document.getElementById('btnScreenDashboard');
@@ -1113,11 +1104,11 @@
                 btnDash.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-slate-100";
                 areaDash.classList.add('hidden');
                 areaEx.classList.remove('hidden');
-                renderExcelScreen(); // Render content excel
+                renderExcelScreen(); // Jalankan render lembaran excel
             }
         }
 
-        // RENDERING UTAMA
+        // FUNGSI INISIALISASI AWAL
         function initApp() {
             renderList();
             renderDetail();
@@ -1126,13 +1117,13 @@
         }
 
         function setupEventListeners() {
-            // Search Input Listeners
+            // Pencarian global real-time
             document.getElementById('searchBarGlobal').addEventListener('input', (e) => {
                 searchQuery = e.target.value;
                 renderList();
             });
 
-            // File Upload Listener & Auto Compressor
+            // Upload foto kargo dan resize otomatis ke format JPEG ringan
             document.getElementById('newPhoto').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -1172,6 +1163,7 @@
             });
         }
 
+        // RENDERING METRIK DASHBOARD
         function renderMetrics() {
             const total = SHIPMENTS.length;
             const active = SHIPMENTS.filter(s => s.currentStatusIndex < 5).length;
@@ -1190,6 +1182,7 @@
             document.getElementById('metricDeliveredBar').style.width = `${deliveredPercent}%`;
         }
 
+        // TABS FILTER CONTROLLER
         function switchTab(tab) {
             currentTab = tab;
             ['all', 'active', 'delivered'].forEach(t => {
@@ -1203,6 +1196,7 @@
             renderList();
         }
 
+        // RENDER LIST MANIFEST
         function renderList() {
             const listContainer = document.getElementById('shipmentList');
             listContainer.innerHTML = '';
@@ -1302,7 +1296,7 @@
             }
         }
 
-        // RENDER DETAIL UTAMA DI SCREEN DASHBOARD
+        // RENDER PANEL DETAIL BARANG
         function renderDetail() {
             const ship = SHIPMENTS.find(s => s.id === selectedId);
             
@@ -1361,7 +1355,7 @@
             const shortDest = destWords[0];
             document.getElementById('mapDestinationLabel').innerText = shortDest;
 
-            // MAP ROUTE ANIMATION SCRIPT
+            // ANIMASI PETA MULTI-HUB KAPAL LAUT
             let percentProgress = 6;
             let lineKupangWidth = 0;
             let lineSurabayaWidth = 0;
@@ -1406,7 +1400,7 @@
 
             document.getElementById('ruteIndicator').innerText = `Wetar Site ➔ Kupang HUB ➔ SUB HUB ➔ ${ship.destination}`;
 
-            // HORIZONTAL MILESTONE BUILDER
+            // MEMBUAT ELEMENT MILESTONES SECARA DINAMIS
             const milestoneContainer = document.getElementById('horizontalMilestones');
             milestoneContainer.innerHTML = '';
             STATUS_STEPS.forEach((stepItem, idx) => {
@@ -1436,7 +1430,7 @@
                 milestoneContainer.appendChild(node);
             });
 
-            // VERTICAL TIMELINE LOGS (SHOPEE STYLE)
+            // RENDERING HISTORI LINIMASA VERTIKAL (SHOPEE STYLE)
             const timelineContainer = document.getElementById('verticalTimeline');
             timelineContainer.innerHTML = '';
             ship.history.forEach((log, idx) => {
@@ -1500,7 +1494,7 @@
                 document.getElementById('btnAdvance').style.display = 'none';
             }
 
-            // Sync static print area data dynamically
+            // Sync data cetak secara real-time
             syncPrintArea(ship);
         }
 
@@ -1862,7 +1856,7 @@
             closeAddModal();
             initApp();
             
-            // Switch view automatically to let them see the created Excel sheet
+            // Pindahkan layar secara otomatis ke Form Excel yang baru terdaftar
             switchMainScreen('excel');
         }
 
@@ -1881,17 +1875,3 @@
     </script>
 </body>
 </html>
-```
-`eof`
-
-Saya telah merancang ulang struktur dashboard utama, dan mengintegrasikannya dengan tab switcher fungsional serta form print layout A4 ber-Fidelity tinggi agar persis seperti gambar **`image_2d5902.png`** Anda langsung di layar komputer.
-
-### Cara Membuka Form Excel Excel Anda Sekarang:
-1. Buka kembali website pelacakan Anda di Vercel setelah Anda meng-update kodenya di GitHub.
-2. Di bar navigasi paling atas, Anda akan melihat sebuah menu switcher: **`📊 Dashboard`** dan **`📄 Form Excel (BTR-516)`**.
-3. **Klik tombol `📄 Form Excel` tersebut.**
-4. Boom! Halaman pelacak akan bertransisi ke lembar kertas putih A4 Excel Material Request yang **100% identik dengan berkas asli Anda di gambar `image_2d5902.png`**.
-5. Anda bisa melihat kolom volume terhitung otomatis, tabel tanda tangan submitted by Bayu Aji Sena, approved by Wasiman W, hingga foto peti kemasan radiator yang dilampirkan!
-6. Tekan tombol **Cetak / Simpan PDF** di atas kertas untuk menyimpannya sebagai PDF resmi perusahaan.
-
-Silakan lakukan pengeditan file di GitHub seperti langkah sebelumnya, hapus kodenya, dan paste kode utuh di atas. Beritahu saya jika tab form barunya sudah berhasil dicoba ya!
