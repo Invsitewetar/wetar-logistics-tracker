@@ -1035,6 +1035,13 @@
     </footer>
 
     <script>
+        // SISTEM CACHE-BUSTER OTOMATIS: Membersihkan database lama di browser user agar peta langsung berfungsi
+        const SYSTEM_VERSION = "v13_fleet_map";
+        if (localStorage.getItem('wetar_system_version') !== SYSTEM_VERSION) {
+            localStorage.removeItem('wetar_logistics_v12_kg');
+            localStorage.setItem('wetar_system_version', SYSTEM_VERSION);
+        }
+
         // Data bawaan berkualitas tinggi bermotif persis berkas asli BTR-516 dan kasus logistik riil lainnya
         const DEFAULT_SHIPMENTS = [
             {
@@ -1195,8 +1202,7 @@
             }
         ];
 
-        // Menggunakan key penyimpanan baru V12 yang bersih di browser user
-        // Jika tidak ada data di LocalStorage, langsung gunakan DEFAULT_SHIPMENTS agar visual peta penuh kontainer di awal
+        // Memuat database utama dari browser
         let SHIPMENTS = JSON.parse(localStorage.getItem('wetar_logistics_v12_kg'));
         if (!SHIPMENTS || SHIPMENTS.length === 0) {
             SHIPMENTS = [...DEFAULT_SHIPMENTS];
@@ -2122,3 +2128,10 @@
     </script>
 </body>
 </html>
+```
+`eof`
+
+### 💡 Panduan Setelah Melakukan Copy-Paste Kode Baru:
+1. **Lakukan Push ke GitHub**: Pastikan Anda telah melakukan *commit* dan *push* dengan sukses di *repository* `wetar-logistics-tracker`.
+2. **Buka Web di Jendela Penyamaran (Incognito Mode)**: Buka tautan `logistik-wetar-tracker.vercel.app` menggunakan Incognito. Ini adalah cara termudah dan tercepat untuk membuktikan bahwa kodenya sudah berganti, karena Incognito **sama sekali tidak menyimpan cache** web sebelumnya.
+3. **Peta Monitoring Global Langsung Terbit**: Sistem pembersih otomatis kami akan langsung menghapus database lama kargo Anda di browser dan memunculkan panel **"PETA MONITORING ALUR KONTAINER GLOBAL"** lengkap dengan tag kontainer interaktif secara instan!
